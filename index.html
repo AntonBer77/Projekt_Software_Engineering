@@ -9,7 +9,7 @@
       <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&family=Rubik:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet">
       <link rel="stylesheet" href="style/main-style.css">
       <!-- <script src="main.js" defer></script> -->
-      <script src="input_validation.js"></script>
+      <script src="input_validation.js" defer></script>
       <link rel="shortcut icon" href="icons/app_logo.svg" type="image/x-icon">
       <title>Willkommen bei IUnity</title>
   </head>
@@ -19,19 +19,19 @@
         <div class="app-logo app-logo--login flex-container align-center gap-1"><img src="icons/app_logo.svg" alt="Logo" srcset="" style="height: 2rem;">IUnity</div>
         <div class="form-container flex-container flex-column gap-4">
           <h1 class="form-heading">Bei Ihrem Konto anmelden</h1>
-          <form action="" id="loginForm" class="flex-container flex-column gap-3">
+          <form action="" id="login-form" class="flex-container flex-column gap-3">
             <div class="form-field">
                 <label for="login-e-mail" class="form-field-label">E-Mail-Adresse</label>
-                <input type="email" name="" id="login-e-mail" class="input-field" autofocus required>
-                <!-- <p class="input-field-description input-field-error-message">Ungültige E-Mail-Adresse</p> -->
+                <input type="email" name="userEmail" id="login-e-mail" class="input-field" autofocus required>
+                <p class="input-field-description input-field-error-message hidden">Ungültige E-Mail-Adresse</p>
               </div>
               <div class="form-field">
                 <div class="flex-container justify-between">
                   <label for="login-password" class="form-field-label">Passwort</label>
                   <a href="password_reset.html" class="button-ghost">Passwort vergessen?</a>
                 </div>
-                <input type="password" name="" id="login-password" class="input-field" required>            
-                <!-- <p class="input-field-description input-field-error-message">Ungültiges Passwort</p> -->
+                <input type="password" name="userPassword" id="login-password" class="input-field" required>            
+                <p class="input-field-description input-field-error-message hidden">Ungültiges Passwort</p>
             </div>
             <button type="submit" form="login-form" class="button-primary m-top">Anmelden</button>
             <div class="flex-container align-center gap-3">
