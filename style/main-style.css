@@ -42,8 +42,10 @@
     --outline-focused-input: 2px solid rgba(255, 255, 255, 0.15);
 
     --correct-answer-bg: #0b6334;
-    --correct-answer-fg: hsl(148, 46%, 49%);
+    /* --correct-answer-fg: #43b679; */
+    --correct-answer-fg: #00ab67;
     --correct-answer-border: 1px solid hsla(148, 73%, 45%, 0.5);
+    --partially-correct-answer-fg: #e8c33f;
     --wrong-answer-bg: #892d2d;
     --wrong-answer-fg: #ff6467;
     --wrong-answer-border: 1px solid hsla(0, 96%, 71%, 0.5);
@@ -477,6 +479,7 @@ a {
 .button--inactive {
     pointer-events: none;
     opacity: 0.6;
+    transition: 0s;
 }
 
 .link {
@@ -1109,6 +1112,10 @@ ul.flex-container {
 
 .correct-answer {
     color: var(--correct-answer-fg);
+}
+
+.partially-correct-answer {
+    color: var(--partially-correct-answer-fg);
 }
 
 .wrong-answer {

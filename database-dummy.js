@@ -11,25 +11,25 @@ const posts = [
     postID: "post-1",
     postDate: new Date("2025-11-11T23:20:00Z"),
     author: "Max Mustermann",
-    subject: "B.Sc. Informatik",
+    degree: "B.Sc. Informatik",
     course: "Requirements Engineering",
     questionType: "Multiple-Choice",
     question: "Du möchtest den Systemüberblick für deinen Projektmanager dokumentieren. Für welches UML-Diagramm entscheidest du dich?", 
     answers: ["Objektdiagramm", "Use-Case-Diagramm", "Klassendiagramm", "Sequenzdiagramm"], 
     correctAnswer: ["answer2"],
-    explanation: "Das Use-Case-Diagramm ermöglicht eine detaillierte Darstellung des Systems",
+    explanation: "Das Use-Case-Diagramm ermöglicht eine detaillierte Darstellung des Systems.",
     privatePost: false,
     likes: 12,
     comments: [
       {
-        username: "Helene Fischer", 
-        userPicture: "red",
+        username: "Andrea Berg", 
+        userPicture: randomizeBackground(),
         postDate: new Date("2025-11-11T23:24:12Z"), 
         content: "Sehr interessanter Beitrag. Bitte mehr davon."
-      }, 
+      },
       {
         username: "Felix Blume", 
-        userPicture: "blue",
+        userPicture: randomizeBackground(),
         postDate: new Date("2025-11-12T11:14:55Z"), 
         content: "Ich war mir sicher, dass Antwort 4 die richtige sei. Man lernt wohl nie aus."
       } 
@@ -37,35 +37,37 @@ const posts = [
   },
   {
     postID: "post-2",
-    postDate: new Date("2025-10-29T14:42:00Z"),
+    postDate: new Date("2025-10-28T12:20:11Z"),
     author: "Max Mustermann",
-    subject: "B.Sc. Informatik",
-    course: "IU Design",
+    degree: "B.Sc. Wirtschaftsinformatik",
+    course: "Finanzierung",
     questionType: "Multiple-Choice",
-    question: "Welche Antwort ist die richtige?", 
-    answers: ["Antwort 1", "Antwort 2", "Antwort 3"], 
-    correctAnswer: ["answer2"],
-    explanation: "Das Use-Case-Diagramm ermöglicht eine detaillierte Darstellung des Systems",
+    question: "Teste die unterschiedlichen Antwortkombinationen", 
+    answers: ["Antwort 1 ist falsch", "Antwort 2 ist richtig", "Antwort 3 ist richtig"], 
+    correctAnswer: ["answer2", "answer3"],
+    explanation: "Hier steht die Erklärung",
     privatePost: false,
-    likes: 14,
+    likes: 25,
     comments: [
       {
-        username: "Helene Fischer", 
-        userPicture: "red",
-        postDate: "12.10.25", 
+        username: "Andrea Berg", 
+        userPicture: randomizeBackground(),
+        postDate: new Date("2025-11-11T23:24:12Z"), 
         content: "Sehr interessanter Beitrag. Bitte mehr davon."
-      }, 
+      },
       {
         username: "Felix Blume", 
-        userPicture: "blue",
-        postDate: "12.10.25", 
+        userPicture: randomizeBackground(),
+        postDate: new Date("2025-11-12T11:14:55Z"), 
         content: "Ich war mir sicher, dass Antwort 4 die richtige sei. Man lernt wohl nie aus."
-      }, 
+      } 
     ]
   }
-  
 ];
 
+function randomizeBackground() {
+  return "DarkSlateGrey";
+}
 
 const myFollowList = ['Requirements Engineering', 'Wissenschaftliches Arbeiten'];
 
@@ -174,7 +176,7 @@ document.addEventListener('DOMContentLoaded', () => {
                       ${answerOptionsContent}
                     </div>
                   </form>
-                  <button form="post-answers-form${postAnswersFormID}" type="submit" class="submit-answer-button button-primary">Auswerten</button>
+                  <button form="post-answers-form${postAnswersFormID}" type="submit" class="submit-answer-button button-primary button--inactive">Auswerten</button>
                 </div>
                 <div class="divider"></div>
                 <div class="post-card-footer">
@@ -220,44 +222,113 @@ function followCourse(e) {
 
 }
 
+
 postsFeed.addEventListener('click', (e) => {
   if (e.target.matches('.answer-option-input')) {
+    const answerOptions = Array.from(e.target.parentElement.parentElement.children);
+    const submitButton = e.target.parentElement.parentElement.parentElement.nextElementSibling;
+
     e.target.parentElement.classList.toggle('answer-option-selected');
+    
+    let selectionMade = answerOptions.some((answerOption) => {
+      return answerOption.matches('.answer-option-selected');
+    })
+
+    selectionMade ? submitButton.classList.remove('button--inactive') : submitButton.classList.add('button--inactive')
+    
   }
 
-  // console.log(e.target)
-  // if(e.target) {
-
-  // }
-
+  
 })
 
 postsFeed.addEventListener('submit', (e) => {
   e.preventDefault();
   const postCardContent = e.target.parentElement;
   const submitButton = e.target.nextElementSibling;
+  // hide the show result button
+  submitButton.classList.add('hidden');
+
   const postQuestion = e.target.parentElement.parentElement.firstElementChild.firstElementChild.innerText;
-
-  const formData = new FormData(e.target);
-  const entries = Object.fromEntries(formData.entries());
-  // const userEmail = entries.userEmail;
-  // const userPassword = entries.userPassword;
-  console.log(entries)
-
   const answerOptions = Array.from(e.target.children[1].children);
-  answerOptions.forEach((answer) => {
-    answer.classList.add('answer-option-disabled');
-  })
-  // console.log(e.target.children[1].children)
-
+  
+  // find the post that was submitted for evaluation
   const correlatingPost = posts.find((post) => {
     return post.question === postQuestion;
   })
 
+  // collect user answers
+  const formData = new FormData(e.target);
+  const entries = Object.fromEntries(formData.entries());
+  const userAnswers = Object.keys(entries);
+  
+  // check if all user answers match correct answers
+  const isUserSelectionCorrect = userAnswers.every((userAnswer) => {
+    return correlatingPost.correctAnswer.includes(userAnswer);
+  })
+
+  const correctAnswerOptions = answerOptions.filter((answerOption) => {
+    let optionName = answerOption.firstElementChild.name;
+    let isCorrectAnswerOption = correlatingPost.correctAnswer.includes(optionName);
+    if(isCorrectAnswerOption) {
+      return answerOption
+    }
+  });
+  
+  const allCorrectAnswersSelected = correctAnswerOptions.every((answer) => {
+    return answer.matches('.answer-option-selected');
+  });
+  
+  
+  const isCorrectAnswer = allCorrectAnswersSelected && isUserSelectionCorrect ? true : false;
+
+  function answerFeedbackResult() {
+    if(isCorrectAnswer) {
+      return "Ihre Antwort ist richtig"
+    }
+
+    if(isUserSelectionCorrect && !allCorrectAnswersSelected) {
+      return "Ihre Antwort ist nur teilweise richtig"
+    }
+
+    if(!isCorrectAnswer) {
+      return "Ihre Antwort ist leider falsch"
+    }
+
+  }
+
+  function feedBackResultColor() {
+    if(isCorrectAnswer) {
+      return "correct-answer"
+    }
+
+    if(isUserSelectionCorrect && !allCorrectAnswersSelected) {
+      return "partially-correct-answer"
+    }
+
+    if(!isCorrectAnswer) {
+      return "wrong-answer"
+    }
+  }
+
+  // find the selected answer-option and change style depending
+  answerOptions.forEach((answer) => {
+    // get the selection
+    let selectedOption = answer.matches('.answer-option-selected');
+    // if answer-option is selected check whether the answer is correct or wrong
+    if(selectedOption) {
+      let selectionName = answer.firstElementChild.name;
+      let isCorrectSelection = correlatingPost.correctAnswer.includes(selectionName);
+      
+      isCorrectSelection ? answer.classList.add('correct-answer-option') : answer.classList.add('wrong-answer-option');
+    }
+
+    answer.classList.add('answer-option-disabled');
+  })
+  
   let result = `
   <div class="solution-container">
     <div class="answer-feedback">
-      <div class="answer-feedback-result correct-answer">Auswertung noch nicht implemntiert</div>                
+      <div class="answer-feedback-result ${feedBackResultColor()}">${answerFeedbackResult()}</div>                
       <button class="show-solution-button button-ghost"><i class="material-icons">keyboard_arrow_down</i>Erklärung anzeigen</button>
     </div>
     <div class="solution-content hidde">${correlatingPost.explanation}</div>
@@ -265,7 +336,6 @@ postsFeed.addEventListener('submit', (e) => {
   `;
 
   postCardContent.insertAdjacentHTML("beforeend", result);
-  submitButton.classList.add('hidden');
 })
 
 // function evaluateResult(event) {
