@@ -71,9 +71,9 @@ function randomizeBackground() {
 
 const myFollowList = ['Requirements Engineering', 'Wissenschaftliches Arbeiten'];
 
-const myFavorites = [{post: 1}, {post: 2}];
+const myFavorites = [{postID: "post-1"}, {postID: "post-2"}];
 
-const myQuestions = [{}]
+const myQuestions = [{postID: "post-1"}];
 
 
 
@@ -122,7 +122,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // options array
     let answerContent = [];
-    // push answer options into answerContent array
+    // push answer options into answerContent[]
     post.answers.forEach((answer) => {
       let answerOption = `
       <label for="answer-option-${answerID}" class="answer-option checkmark-label">
@@ -184,8 +184,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     <button class="like-button user-feedback-button" title="Gefällt mir">
                       <div class="button-icon animation-container" onclick="likePost(event)">
                         <i class="material-icons">favorite_border</i>
-                        <div class="animation-item hide-visibility">
-                          <i class="material-icons">favorite</i>
+                        <div class="animation-item hidden">
+                          <i class="material-icons like-color">favorite</i>
                         </div>
                       </div>
                       <span class="user-feedback-counter">${post.likes}</span>
@@ -197,7 +197,14 @@ document.addEventListener('DOMContentLoaded', () => {
                   </div>                                  
                   <div class="flex-container align-center gap-0">
                     <button class="share-post-button user-feedback-button button-icon" title="Beitrag teilen"><i class="material-icons" style="transform: scale(-100%, 100%);">reply</i></button>
-                    <button class="save-post-button user-feedback-button button-icon" title="Beitrag speichern"><i class="material-icons">bookmark_border</i></button>
+                    <button class="save-post-button user-feedback-button" title="Beitrag speichern">
+                      <div class="button-icon animation-container" onclick="savePost(event)">
+                        <i class="material-icons">bookmark_border</i>
+                        <div class="animation-item hidden">
+                          <i class="material-icons">bookmark</i>
+                        </div>
+                      </div>
+                    </button>
                   </div>
                 </div>
               </div>
@@ -212,13 +219,15 @@ document.addEventListener('DOMContentLoaded', () => {
   })
 })
 
-// follow button adds a course to myFollowList
+// follow button adds a course to myFollowList[]
 function followCourse(e) {
   // get course name
   let courseName = e.currentTarget.parentElement.firstElementChild.attributes[1].textContent;
+
   // check whether course is followed (safety measure, because follow buttons should only be rendered when course is not followed)
   let followed = myFollowList.includes(courseName);
-  // add course to myFollowList and deactivate follow button
+
+  // add course to myFollowList[] and deactivate follow button
   if(!followed) {
     myFollowList.push(courseName);
     e.target.innerText = "Gefolgt";
@@ -227,18 +236,22 @@ function followCourse(e) {
 
 }
 
-
+// listen for post interactions
 postsFeed.addEventListener('click', (e) => {
+  // check if click event is answer-option-input
   if(e.target.matches('.answer-option-input')) {
     const answerOptions = Array.from(e.target.parentElement.parentElement.children);
     const submitButton = e.target.parentElement.parentElement.parentElement.nextElementSibling;
-
+    
+    // toggle active selection class
     e.target.parentElement.classList.toggle('answer-option-selected');
     
+    // check if any selection was made
     let selectionMade = answerOptions.some((answerOption) => {
       return answerOption.matches('.answer-option-selected');
     })
-
+    
+    // if any selection was made then activate the submit button else deactive submit button
     selectionMade ? submitButton.classList.remove('button--inactive') : submitButton.classList.add('button--inactive')
     
   }
@@ -251,45 +264,69 @@ postsFeed.addEventListener('click', (e) => {
   
 })
 
+// when user clicks the like button call this function to change the like count
 function changeLikeCount(targetCounter, postLiked, button) {
+  // check if the post has already been liked
   if(!postLiked) {
+    // if not liked then add a custom like attribute to track like state
     const likeAttribute = document.createAttribute('data-liked');
     button.setAttributeNode(likeAttribute);
+    // add +1 to like counter
     targetCounter.innerText++;
-  } else {
-    targetCounter.innerText--;
+  } 
+  // if already liked then remove like attribute and subtract -1 from counter
+  else {
     button.removeAttribute('data-liked');
+    targetCounter.innerText--;
   }
 }
-
+// on like button click trigger this function
 function likePost(event) {
   const likeButton = event.currentTarget;
-  const likeAnimationIcon = likeButton.children[1];
+  const likeAnimationItem = likeButton.children[1];
   const counter = event.currentTarget.nextElementSibling;
+  // check if the like button has the attribute "data-liked"
   const isPostLiked = likeButton.hasAttribute('data-liked');
 
-  likeButton.firstElementChild.classList.toggle('hide-visibility');
-  likeAnimationIcon.classList.toggle('hide-visibility');
-  likeAnimationIcon.classList.toggle('like-animation');
+  // display animation when button was clicked
+  likeButton.firstElementChild.classList.toggle('hidden');
+  likeAnimationItem.classList.toggle('hidden');
+  likeAnimationItem.firstElementChild.classList.toggle('icon-animation');
 
-  // const likeButtonAttributes = likeButton.attributes;
-  // const likeButtonAttributesArray = Array.from(likeButtonAttributes)
-  
-  // const isPostLiked = likeButtonAttributesArray.some((attribute) => {
-  //   return attribute.name === "data-liked";
-  // })
-  
-  
-  // const isPostLiked = likeButtonAttributesArray.length == 3;
-  
+  // call changeLikeCount function and pass arguments from the event
   changeLikeCount(counter, isPostLiked, likeButton);
-
-  // console.log(isPostLiked)
 
 }
 
+// on save post button click trigger this function
+function savePost(event) {
+  const saveButton = event.currentTarget;
+  const animationItem = saveButton.children[1];
+  // const isPostLiked = likeButton.hasAttribute('data-liked');
 
+  saveButton.firstElementChild.classList.toggle('hidden');
+  animationItem.classList.toggle('hidden');
+  animationItem.firstElementChild.classList.toggle('icon-animation');
+
+  // changeLikeCount(counter, isPostLiked, likeButton);
+
+}
+
+// on show explanation button click trigger this function
+function showExplanation(event) {
+  const showSolutionButton = event.currentTarget;
+  const solutionContent = showSolutionButton.parentElement.nextElementSibling;
+  // check if solution content includes the class "hidden"
+  let isSolutionContentHidden = solutionContent.classList.contains('hidden');
+  // if content is hidden then rotate arrow icon up else down
+  isSolutionContentHidden ? showSolutionButton.firstElementChild.style.rotate = "180deg" : showSolutionButton.firstElementChild.style.rotate = "0deg";
+  // show or hide the solution content
+  solutionContent.classList.toggle('hidden');
+}
+
+// when user submits his answer selection trigger this function
 postsFeed.addEventListener('submit', (e) => {
+  // stop the default submit event, data is not send to a server
   e.preventDefault();
   const postCardContent = e.target.parentElement;
   const submitButton = e.target.nextElementSibling;
@@ -314,6 +351,7 @@ postsFeed.addEventListener('submit', (e) => {
     return correspondingPost.correctAnswer.includes(userAnswer);
   })
 
+  // filter all answer options just for the correct ones
   const correctAnswerOptions = answerOptions.filter((answerOption) => {
     let optionName = answerOption.firstElementChild.name;
     let isCorrectAnswerOption = correspondingPost.correctAnswer.includes(optionName);
@@ -322,13 +360,14 @@ postsFeed.addEventListener('submit', (e) => {
     }
   });
   
+  // check if all correct answers are selected
   const allCorrectAnswersSelected = correctAnswerOptions.every((answer) => {
     return answer.matches('.answer-option-selected');
   });
   
-  
+  // check if all conditions for the correct answer are met
   const isCorrectAnswer = allCorrectAnswersSelected && isUserSelectionCorrect ? true : false;
-
+  // set the feedback message
   function answerFeedbackResult() {
     if(isCorrectAnswer) {
       return "Ihre Antwort ist richtig"
@@ -343,7 +382,7 @@ postsFeed.addEventListener('submit', (e) => {
     }
 
   }
-
+  // set the feedback message color
   function feedBackResultColor() {
     if(isCorrectAnswer) {
       return "correct-answer"
@@ -358,18 +397,19 @@ postsFeed.addEventListener('submit', (e) => {
     }
   }
 
-  // find the selected answer-option and change style depending
+  // find the submitted answer-option and change style
   answerOptions.forEach((answer) => {
     // get the selection
     let selectedOption = answer.matches('.answer-option-selected');
     // if answer-option is selected check whether the answer is correct or wrong
     if(selectedOption) {
       let selectionName = answer.firstElementChild.name;
+      // evaluate user answer
       let isCorrectSelection = correspondingPost.correctAnswer.includes(selectionName);
-      
+      // show correct answer in green, wrong answer in red
       isCorrectSelection ? answer.classList.add('correct-answer-option') : answer.classList.add('wrong-answer-option');
     }
-
+    // disable answer selection after submit
     answer.classList.add('answer-option-disabled');
   })
   
@@ -377,33 +417,12 @@ postsFeed.addEventListener('submit', (e) => {
   <div class="solution-container">
     <div class="answer-feedback">
       <div class="answer-feedback-result ${feedBackResultColor()}">${answerFeedbackResult()}</div>                
-      <button class="show-solution-button button-ghost"><i class="material-icons">keyboard_arrow_down</i>Erklärung anzeigen</button>
+      <button class="show-solution-button button-ghost" onclick="showExplanation(event)"><i class="material-icons">keyboard_arrow_down</i>Erklärung anzeigen</button>
     </div>
-    <div class="solution-content hidde">${correspondingPost.explanation}</div>
+    <div class="solution-content hidden">${correspondingPost.explanation}</div>
   </div>
   `;
-
+  // render answer feedback container
   postCardContent.insertAdjacentHTML("beforeend", result);
 })
 
-// function evaluateResult(event) {
-//   const postQuestion = event.currentTarget.parentElement.parentElement.firstElementChild.firstElementChild.innerText;
-
-//   let correspondingPost = posts.find((post) => {
-//     return post.question === postQuestion;
-//   })
-
-//   let result = `
-//   <div class="solution-container">
-//     <div class="answer-feedback">
-//       <div class="answer-feedback-result correct-answer">Ihre Antwort ist richtig!</div>                
-//       <button class="show-solution-button button-ghost"><i class="material-icons">keyboard_arrow_down</i>Erklärung anzeigen</button>
-//     </div>
-//     <div class="solution-content hidde">${correspondingPost.explanation}</div>
-//   </div>
-//   `;
-
-//   event.currentTarget.parentElement.insertAdjacentHTML("beforeend", result);
-
-//   event.currentTarget.classList.add('hidden');
-// }
