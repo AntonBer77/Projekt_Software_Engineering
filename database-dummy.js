@@ -80,20 +80,7 @@ const posts = [
     explanation: "Hier steht die Erklärung",
     privatePost: false,
     likes: 14,
-    comments: [
-      {
-        username: "Andrea Berg", 
-        userPicture: randomizeBackground(),
-        postDate: new Date("2025-11-11T23:24:12Z"), 
-        content: "Sehr interessanter Beitrag. Bitte mehr davon."
-      },
-      {
-        username: "Felix Blume", 
-        userPicture: randomizeBackground(),
-        postDate: new Date("2025-11-12T11:14:55Z"), 
-        content: "Ich war mir sicher, dass Antwort 4 die richtige sei. Man lernt wohl nie aus."
-      } 
-    ]
+    comments: []
   }
 ];
 
@@ -145,14 +132,49 @@ function timeSince(date) {
 
 const postsFeed = document.getElementById('posts-feed');
 
-// when DOM content is loaded render post feed content
-document.addEventListener('DOMContentLoaded', () => {
+// follow button adds a course to myFollowList[]
+function followCourse(e) {
+  // get course name
+  let courseName = e.currentTarget.parentElement.firstElementChild.attributes[1].textContent;
+
+  // check if myFollowList[] includes this course
+  let followed = myFollowList.includes(courseName);
+
+  // add course to myFollowList[] and deactivate follow button
+  if(!followed) {
+    myFollowList.push(courseName);
+    e.target.innerText = "Gefolgt";
+    e.target.classList.add('button--inactive');
+  }
+
+}
+
+// follow button is rendered when course is not followed
+function renderFollowButton(post) {
+  // check if the user follows post.course
+  let courseFollowed = myFollowList.includes(post.course);
+
+  let followButton = "";
+  
+  if(!courseFollowed) {                      
+    followButton = `
+    <span>&#128900;</span>
+    <div class="button-ghost" onclick="followCourse(event)">Folgen</div>                      
+    `;
+  }
+  return followButton                    
+}
+
+
+
+function renderPostFeed(postsDataset) {
   let answerID = 1;
   let postAnswersFormID = 1;
-
-  posts.forEach((post) => {
+  
+  postsDataset.forEach((post) => {
+    const postID = post.postID;
     let answerName = 1;
-
+  
     
     function renderPostCardContent(questionType) {
       // options array
@@ -190,114 +212,92 @@ document.addEventListener('DOMContentLoaded', () => {
         `;
         
         answerID = answerID + 2;
-
+  
         // push answer options into answerContent[]
         answerContent.push(answerOptions)
         
       }
       // join answer options into a single string for rendering
       let answerOptionsContent = answerContent.join("");
-
+  
       return answerOptionsContent;
     }
-
-
-    // check if the user follows post.course
-    let courseFollowed = myFollowList.includes(post.course);
-    // follow button is rendered when course is not followed
-    function renderFollowButton(followStatus) {
-      let followButton = "";
-      
-      if(!followStatus) {                      
-        followButton = `
-        <span>&#128900;</span>
-        <div class="button-ghost" onclick="followCourse(event)">Folgen</div>                      
-        `;
-      }
-      return followButton                    
-    }
-
+  
     let postContent = `
       <article id="${post.postID}" class="post">
-              <div class="post-info">
-                <div class="post-specifications">
-                  <div class="course-name link" data-course-name="${post.course}" title="Zum Kurs wechseln">k/${post.course}</div>
-                  <span>&#128900;</span>
-                  <div class="post-date">${timeSince(post.postDate)}</div>
-                  ${renderFollowButton(courseFollowed)}
-                </div>
-                <div class="post-menu button-icon"><i class="material-icons">more_horiz</i></div>
+        <div class="post-info">
+          <div class="post-specifications">
+            <div class="course-name link" data-course-name="${post.course}" title="Zum Kurs wechseln">k/${post.course}</div>
+            <span>&#128900;</span>
+            <div class="post-date">${timeSince(post.postDate)}</div>
+            ${renderFollowButton(post)}
+          </div>
+          <div class="post-menu button-icon"><i class="material-icons">more_horiz</i></div>
+        </div>
+        <div class="post-card">
+          <header class="post-card-header">
+            <h2 class="post-heading">${post.question}</h2>
+          </header>
+          <div class="post-card-content">
+            <form id="post-answers-form${postAnswersFormID}" class="post-answers">
+              <div class="post-card-question-type">${post.questionType}:</div>
+              <div class="answer-options-container">
+                ${renderPostCardContent(post.questionType)}
               </div>
-              <div class="post-card">
-                <header class="post-card-header">
-                  <h2 class="post-heading">${post.question}</h2>
-                </header>
-                <div class="post-card-content">
-                  <form id="post-answers-form${postAnswersFormID}" class="post-answers">
-                    <div class="post-card-question-type">${post.questionType}:</div>
-                    <div class="answer-options-container">
-                      ${renderPostCardContent(post.questionType)}
-                    </div>
-                  </form>
-                  <button form="post-answers-form${postAnswersFormID}" type="submit" class="submit-answer-button button-primary button--inactive">Auswerten</button>
-                </div>
-                <div class="divider"></div>
-                <div class="post-card-footer">
-                  <div class="flex-container align-center gap-0">
-                    <button class="like-button user-feedback-button" title="Gefällt mir">
-                      <div class="button-icon animation-container" onclick="likePost(event)">
-                        <i class="material-icons">favorite_border</i>
-                        <div class="animation-item hidden">
-                          <i class="material-icons like-color">favorite</i>
-                        </div>
-                      </div>
-                      <span class="user-feedback-counter">${post.likes}</span>
-                    </button>                  
-                    <button class="comment-button user-feedback-button" title="Kommentare anzeigen">
-                      <div class="button-icon"><i class="material-icons">chat_bubble_outline</i></div>
-                      <span class="user-feedback-counter">${post.comments.length}</span>
-                    </button>                  
-                  </div>                                  
-                  <div class="flex-container align-center gap-0">
-                    <button class="share-post-button user-feedback-button button-icon" title="Beitrag teilen"><i class="material-icons" style="transform: scale(-100%, 100%);">reply</i></button>
-                    <button class="save-post-button user-feedback-button" title="Beitrag speichern">
-                      <div class="button-icon animation-container" onclick="savePost(event)">
-                        <i class="material-icons">bookmark_border</i>
-                        <div class="animation-item hidden">
-                          <i class="material-icons">bookmark</i>
-                        </div>
-                      </div>
-                    </button>
+            </form>
+            <button form="post-answers-form${postAnswersFormID}" type="submit" class="submit-answer-button button-primary button--inactive">Auswerten</button>
+          </div>
+          <div class="divider"></div>
+          <div class="post-card-footer">
+            <div class="flex-container align-center gap-0">
+              <button class="like-button user-feedback-button" title="Gefällt mir">
+                <div class="button-icon animation-container" onclick="likePost(event)">
+                  <i class="material-icons">favorite_border</i>
+                  <div class="animation-item hidden">
+                    <i class="material-icons like-color">favorite</i>
                   </div>
                 </div>
-              </div>
-            </article>
-            <div class="divider"></div>
+                <span class="user-feedback-counter">${post.likes}</span>
+              </button>                  
+              <button class="comment-button user-feedback-button" title="Kommentare anzeigen" data-post-id="${postID}" onclick="showComments(event)">
+                <div class="button-icon"><i class="material-icons">chat_bubble_outline</i></div>
+                <span class="user-feedback-counter">${post.comments.length}</span>
+              </button>
+            </div>
+            <div class="flex-container align-center gap-0">
+              <button class="share-post-button user-feedback-button button-icon" title="Beitrag teilen">
+                <i class="material-icons" style="transform: scale(-100%, 100%);">reply</i>
+              </button>
+              <button class="save-post-button user-feedback-button" title="Beitrag speichern">
+                <div class="button-icon animation-container" onclick="savePost(event)">
+                  <i class="material-icons">bookmark_border</i>
+                  <div class="animation-item hidden">
+                    <i class="material-icons">bookmark</i>
+                  </div>
+                </div>
+              </button>
+            </div>
+          </div>
+        </div>
+      </article>
+      <div class="divider"></div>
     `;
-
+  
     postAnswersFormID++;
-
+  
     postsFeed.insertAdjacentHTML("beforeend", postContent);
-
+  
   })
-})
-
-// follow button adds a course to myFollowList[]
-function followCourse(e) {
-  // get course name
-  let courseName = e.currentTarget.parentElement.firstElementChild.attributes[1].textContent;
-
-  // check whether course is followed (safety measure, because follow buttons should only be rendered when course is not followed)
-  let followed = myFollowList.includes(courseName);
-
-  // add course to myFollowList[] and deactivate follow button
-  if(!followed) {
-    myFollowList.push(courseName);
-    e.target.innerText = "Gefolgt";
-    e.target.classList.add('button--inactive');
-  }
 
 }
+
+
+
+// when DOM content is loaded render post feed content
+document.addEventListener('DOMContentLoaded', () => {
+  renderPostFeed(posts);
+})
+
 
 // listen for post interactions
 postsFeed.addEventListener('click', (e) => {
@@ -385,6 +385,110 @@ function likePost(event) {
 
   // call changeLikeCount function and pass arguments from the event
   changeLikeCount(counter, isPostLiked, likeButton);
+
+}
+
+function showComments(event) {
+  const postID = event.currentTarget.attributes["data-post-id"].value;
+  const correspondingPost = posts.find((post) => {
+    return post.postID === postID;
+  })
+
+
+
+
+
+  let postContent = 
+  `
+  <div class="modal">
+    <div class="modal-content">
+        <div class="post-section">
+          <div class="post-info">
+            <div class="post-specifications">
+              <div class="course-name link" title="Zum Kurs wechseln">k/${correspondingPost.course}</div>
+              <span>&#128900;</span>
+              <div class="post-date">${timeSince(correspondingPost.postDate)}</div>
+              ${renderFollowButton(correspondingPost)}
+            </div>
+            <div class="post-menu button-icon">
+              <i class="material-icons">more_horiz</i>
+            </div>
+          </div>
+          <div class="post-card">
+            <header class="post-card-header">
+              <h2 class="post-heading">${correspondingPost.question}</h2>
+            </header>
+            <div class="post-card-content">
+              <form id="post-answers-form" class="post-answers">
+                <div class="post-card-question-type">${correspondingPost.questionType}</div>
+                <div class="answer-options-container">
+                  Antwortmöglichkeiten
+                </div>
+              </form>
+              <button form="post-answers-form" type="submit" class="submit-answer-button button-primary button--inactive">Auswerten</button>                        
+            </div>                      
+            <div class="post-card-footer">
+              <div class="flex-container align-center gap-0">
+                <button class="like-button user-feedback-button" title="Gefällt mir">
+                  <div class="button-icon animation-container" onclick="likePost(event)">
+                    <i class="material-icons">favorite_border</i>
+                    <div class="animation-item hidden">
+                      <i class="material-icons like-color">favorite</i>
+                    </div>
+                  </div>
+                  <span class="user-feedback-counter">12</span>
+                </button>                  
+                <button class="comment-button user-feedback-button" title="Kommentar schreiben">
+                  <div class="button-icon"><i class="material-icons">chat_bubble_outline</i></div>              
+                </button>
+              </div>
+              <div class="flex-container align-center gap-0">
+                <button class="share-post-button user-feedback-button button-icon" title="Beitrag teilen">
+                  <i class="material-icons" style="transform: scale(-100%, 100%);">reply</i>
+                </button>
+                <button class="save-post-button user-feedback-button" title="Beitrag speichern">
+                  <div class="button-icon animation-container" onclick="savePost(event)">
+                    <i class="material-icons">bookmark_border</i>
+                    <div class="animation-item hidden">
+                      <i class="material-icons">bookmark</i>
+                    </div>
+                  </div>
+                </button>
+              </div>
+            </div>
+          </div>                    
+        </div>
+        <div class="comment-section">
+          <div class="comment-section-header">
+            <h3 class="comment-section-heading">Kommentare<span class="comments-counter">${correspondingPost.comments.length}</span>
+            </h3>
+            <button type="button" class="button-icon"><i class="material-icons" style="font-size: 28px;">sort</i></button>
+          </div>
+            <div class="comment-section-content">                    
+              <div class="user-comment">
+                <div class="user-profile-picture">M</div>
+                <div class="user-comment-info">
+                  <div class="flex-container align-center gap-0">
+                    <h4 class="comment-username">Max Mustermann</h4>
+                    <span>&#128900;</span>
+                    <span class="comment-post-date">14 min</span>
+                  </div>
+                  <div class="comment-menu button-icon"><i class="material-icons">more_vert</i></div>
+                </div>
+                <p class="user-comment-content">Dieser Beitrag ist sehr hilfreich. Danke!</p>
+              </div>                          
+            </div>
+            <div class="comment-section-footer">                    
+              <textarea name="" id="textarea" class="comment-input auto-grow-element" placeholder="Kommentar hinzufügen" rows="1"></textarea>
+              <button type="submit" class="button-secondary">Posten</button>
+            </div>
+        </div>
+    </div>
+  </div>
+  `;
+
+  postsFeed.insertAdjacentHTML("afterbegin", postContent);
+  console.log(correspondingPost)
 
 }
 
