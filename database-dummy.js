@@ -62,6 +62,33 @@ const posts = [
         content: "Ich war mir sicher, dass Antwort 4 die richtige sei. Man lernt wohl nie aus."
       } 
     ]
+  },
+  {
+    postID: "post-2",
+    postDate: new Date("2025-10-22T17:21:41Z"),
+    author: "Max Mustermann",
+    degree: "B.Sc. Wirtschaftsinformatik",
+    course: "Seminar Software Engineering",
+    questionType: "Wahr-oder-Falsch",
+    question: "Diese Aussage ist wahr",  
+    correctAnswer: ["trueStatement"],
+    explanation: "Hier steht die Erklärung",
+    privatePost: false,
+    likes: 25,
+    comments: [
+      {
+        username: "Andrea Berg", 
+        userPicture: randomizeBackground(),
+        postDate: new Date("2025-11-11T23:24:12Z"), 
+        content: "Sehr interessanter Beitrag. Bitte mehr davon."
+      },
+      {
+        username: "Felix Blume", 
+        userPicture: randomizeBackground(),
+        postDate: new Date("2025-11-12T11:14:55Z"), 
+        content: "Ich war mir sicher, dass Antwort 4 die richtige sei. Man lernt wohl nie aus."
+      } 
+    ]
   }
 ];
 
@@ -113,6 +140,7 @@ function timeSince(date) {
 
 const postsFeed = document.getElementById('posts-feed');
 
+// when DOM content is loaded render post feed content
 document.addEventListener('DOMContentLoaded', () => {
   let answerID = 1;
   let postAnswersFormID = 1;
@@ -120,24 +148,54 @@ document.addEventListener('DOMContentLoaded', () => {
   posts.forEach((post) => {
     let answerName = 1;
 
-    // options array
-    let answerContent = [];
-    // push answer options into answerContent[]
-    post.answers.forEach((answer) => {
-      let answerOption = `
-      <label for="answer-option-${answerID}" class="answer-option checkmark-label">
-        <input type="checkbox" name="answer${answerName}" id="answer-option-${answerID}" class="answer-option-input">
-        <span class="custom-checkmark" title="Wählen Sie die richtige Antwort aus"></span>
-        <p class="answer-option-content checkmark-label-content">${answer}</p>
-      </label>                      
-      `;
-      answerID++;
-      answerName++;
+    
+    function renderPostCardContent(questionType) {
+      // options array
+      let answerContent = [];
+      // if question type is Multiple-Choice then render this content
+      if(questionType === "Multiple-Choice") {
+        // push answer options into answerContent[]
+        post.answers.forEach((answer) => {
+          let answerOption = `
+          <label for="answer-option-${answerID}" class="answer-option checkmark-label">
+            <input type="checkbox" name="answer${answerName}" id="answer-option-${answerID}" class="answer-option-input">
+            <span class="custom-checkmark" title="Wählen Sie die richtige Antwort aus"></span>
+            <p class="answer-option-content checkmark-label-content">${answer}</p>
+          </label>                      
+          `;
+          answerID++;
+          answerName++;
+    
+          answerContent.push(answerOption)
+        });
+      // if question type is Wahr-oder-Falsch then render this content
+      }
+      if(questionType === "Wahr-oder-Falsch") {
+        let answerOptions = `
+        <label for="answer-option-${answerID}" class="answer-option checkmark-label">
+          <input type="radio" name="trueOrFalse" value="trueStatement" id="answer-option-${answerID}" class="answer-option-input">
+          <span class="custom-checkmark" title="Wählen Sie die richtige Antwort aus"></span>
+          <p class="answer-option-content checkmark-label-content">Wahr</p>
+        </label>                      
+          <label for="answer-option-${answerID + 1}" class="answer-option checkmark-label">
+          <input type="radio" name="trueOrFalse" value="falseStatement" id="answer-option-${answerID + 1}" class="answer-option-input">
+          <span class="custom-checkmark" title="Wählen Sie die richtige Antwort aus"></span>
+          <p class="answer-option-content checkmark-label-content">Falsch</p>
+        </label>                      
+        `;
+        
+        answerID = answerID + 2;
 
-      answerContent.push(answerOption)
-    });
-    // join answer options into a single string for rendering
-    let answerOptionsContent = answerContent.join("");
+        // push answer options into answerContent[]
+        answerContent.push(answerOptions)
+        
+      }
+      // join answer options into a single string for rendering
+      let answerOptionsContent = answerContent.join("");
+
+      return answerOptionsContent;
+    }
+
 
     // check if the user follows post.course
     let courseFollowed = myFollowList.includes(post.course);
@@ -145,7 +203,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function renderFollowButton(followStatus) {
       let followButton = "";
       
-      if(followStatus) {                      
+      if(!followStatus) {                      
         followButton = `
         <span>&#128900;</span>
         <div class="button-ghost" onclick="followCourse(event)">Folgen</div>                      
@@ -161,7 +219,7 @@ document.addEventListener('DOMContentLoaded', () => {
                   <div class="course-name link" data-course-name="${post.course}" title="Zum Kurs wechseln">k/${post.course}</div>
                   <span>&#128900;</span>
                   <div class="post-date">${timeSince(post.postDate)}</div>
-                  ${renderFollowButton(!courseFollowed)}
+                  ${renderFollowButton(courseFollowed)}
                 </div>
                 <div class="post-menu button-icon"><i class="material-icons">more_horiz</i></div>
               </div>
@@ -173,7 +231,7 @@ document.addEventListener('DOMContentLoaded', () => {
                   <form id="post-answers-form${postAnswersFormID}" class="post-answers">
                     <div class="post-card-question-type">${post.questionType}:</div>
                     <div class="answer-options-container">
-                      ${answerOptionsContent}
+                      ${renderPostCardContent(post.questionType)}
                     </div>
                   </form>
                   <button form="post-answers-form${postAnswersFormID}" type="submit" class="submit-answer-button button-primary button--inactive">Auswerten</button>
@@ -238,8 +296,8 @@ function followCourse(e) {
 
 // listen for post interactions
 postsFeed.addEventListener('click', (e) => {
-  // check if click event is answer-option-input
-  if(e.target.matches('.answer-option-input')) {
+  // check if click target is a checkbox input element
+  if(e.target.matches('.answer-option-input') && e.target.type === "checkbox") {
     const answerOptions = Array.from(e.target.parentElement.parentElement.children);
     const submitButton = e.target.parentElement.parentElement.parentElement.nextElementSibling;
     
@@ -255,8 +313,35 @@ postsFeed.addEventListener('click', (e) => {
     selectionMade ? submitButton.classList.remove('button--inactive') : submitButton.classList.add('button--inactive')
     
   }
+  // check if click target is a radio input element
+  if(e.target.matches('.answer-option-input') && e.target.type === "radio") {
+    const answerOptions = Array.from(e.target.parentElement.parentElement.children);
+    const submitButton = e.target.parentElement.parentElement.parentElement.nextElementSibling;
+    
+    // check if target already selected
+    if (e.target.parentElement.matches('.answer-option-selected')) {
+      return
+    }
+    // if not selected do this
+    else {
+      // toggle selection class on the other option
+      answerOptions.forEach((option) => {
+        option.matches('.answer-option-selected') ? option.classList.toggle('answer-option-selected') : null;
+      })
+      // toggle selection class for current selection target
+      e.target.parentElement.classList.toggle('answer-option-selected');
+    }
+    
+    // check if any selection was made
+    let selectionMade = answerOptions.some((answerOption) => {
+      return answerOption.matches('.answer-option-selected');
+    })
+    
+    // if any selection was made then activate the submit button else deactive submit button
+    selectionMade ? submitButton.classList.remove('button--inactive') : submitButton.classList.add('button--inactive')    
+  }
 
-  // console.log(e.target)
+  // console.log(e.target.type)
 
   // if(e.target.matches('.like-button')) {
   //   console.log(e.target)
