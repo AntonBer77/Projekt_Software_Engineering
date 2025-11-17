@@ -217,7 +217,7 @@ const alertConfirmButton = document.getElementsByClassName('alert-confirm-button
 function closeModal(modal) {    
     modal.addEventListener('click', (e) => {
         if(e.target === modal) {
-            modal.style.display = 'none';
+            modal.classList.toggle('.hidden');
         }
     })
 }

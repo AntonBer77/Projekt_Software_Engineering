@@ -47,10 +47,10 @@ const posts = [
     degree: "B.Sc. Wirtschaftsinformatik",
     course: "Finanzierung",
     questionType: "Multiple-Choice",
-    question: "Teste die unterschiedlichen Antwortkombinationen", 
-    answers: ["Antwort 1 ist falsch", "Antwort 2 ist richtig", "Antwort 3 ist richtig"], 
+    question: "Maximale Länge soll auf 400 Chars limitiert werden. A wonderful serenity has taken possession of my entire soul, like these sweet mornings of spring which I enjoy with my whole heart. I am alone, and feel the charm of existence in this spot, which was created for the bliss of souls like mine. I am so happy, my dear friend, so absorbed in the exquisite sense of mere tranquil existence, that I negle", 
+    answers: ["Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts. Separated they live in Bookmarksgrove right at the coast of the Semantics, a large.", "Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts. Separated they live in Bookmarksgrove right at the coast of the Semantics, a large.", "Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts. Separated they live in Bookmarksgrove right at the coast of the Semantics, a large.", "Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts. Separated they live in Bookmarksgrove right at the coast of the Semantics, a large."], 
     correctAnswer: ["answer2", "answer3"],
-    explanation: "Hier steht die Erklärung",
+    explanation: "Hier steht die Erklärung. Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quasi saepe ea eos! Nihil laboriosam repellat eaque necessitatibus soluta ipsam neque, voluptates libero, suscipit minima reprehenderit vel tempore a quod deserunt adipisci voluptatibus sit sequi modi aliquid non voluptas autem. Nobis cum fuga, ducimus quas unde natus repudiandae consequuntur exercitationem sed laudantium aperiam alias illo harum, a consequatur dolorum sequi dignissimos rem deserunt eligendi ab suscipit eveniet! Exercitationem in quaerat eligendi ex corporis? Quis iure illum officiis. Optio minima aliquid sed dolore quisquam, voluptate ex nesciunt nisi distinctio, est hic fuga similique eum repellendus cum non mollitia eaque laudantium eos sequi earum sint ducimus asperiores? Eligendi quia ullam aliquid obcaecati veniam architecto consequuntur aperiam aliquam minima exercitationem nostrum, earum officia! A maiores quod itaque at, culpa totam sunt natus fugiat unde omnis sequi voluptas est dolorum, perspiciatis facere suscipit illo cumque sint autem. Mollitia nulla accusamus atque quaerat iure magnam cumque, voluptatem laborum id nisi perspiciatis ad beatae sapiente porro, delectus alias sunt optio tenetur corporis fugit illum saepe voluptatibus necessitatibus similique. Quia, blanditiis esse, aliquam provident, possimus earum expedita fuga iste rerum corrupti eligendi inventore laborum architecto minima id! Tenetur rerum hic, sed necessitatibus optio sapiente assumenda modi at aperiam. Sequi nisi adipisci saepe unde a, accusamus vel consequuntur quos. Fuga autem suscipit laborum ratione magnam, ad repellendus voluptatem similique obcaecati delectus nemo reprehenderit. Ratione quam qui illo expedita quibusdam perspiciatis, molestias tempora ipsam id praesentium accusamus. Aliquam repudiandae hic beatae placeat animi a distinctio nihil blanditiis sapiente, nostrum, quo omnis. Illo nulla, et magni quas ut aspernatur ipsam tenetur vel nemo ab ipsum, velit alias consequuntur dolorem aliquam eaque voluptatem dolor! Aliquam, explicabo vitae. Cum, eius obcaecati! Facilis minima totam quisquam accusantium iste eos ea, numquam ducimus temporibus error animi, assumenda incidunt odit quae, libero similique adipisci enim eum.",
     privatePost: false,
     likes: 25,
     comments: [
@@ -107,6 +107,7 @@ const posts = [
     comments: []
   }
 ];
+
 
 function randomizeBackground() {
   const backgroundColors = ['crimson', 'darkcyan', 'darkolivegreen', 'darkmagenta', 'darkslateblue', 'darkslategrey', 'green', 'midnightblue'];
@@ -435,11 +436,21 @@ function likePost(event) {
 
 }
 
-function setModalContentHeight() {
-  const postSectionHeight = postsFeed.firstElementChild.children[1].firstElementChild.clientHeight;
-  const modalContent = postsFeed.firstElementChild.children[1];
+function setCommentSectionHeight() {
+  if(postsFeed.firstElementChild.children[1].children[1].matches('.comment-section')) {
+    const postSectionHeight = postsFeed.firstElementChild.children[1].firstElementChild.clientHeight;
+    const commentSection = postsFeed.firstElementChild.children[1].children[1];
+    const postHeaderHeight = postsFeed.firstElementChild.children[1].firstElementChild.lastElementChild.firstElementChild.clientHeight;
+    const postCardContent = postsFeed.firstElementChild.children[1].firstElementChild.lastElementChild.children[1];
+    
+    // similar to CSS settings (100% - 2rem)
+    const modalContentMaxHeight = window.innerHeight - 32;
+
+    postCardContent.style.maxHeight = `${(modalContentMaxHeight - postSectionHeight) + postSectionHeight - 110 - postHeaderHeight}px`;
+
+    commentSection.style.height = `${postSectionHeight}px`;
+  }
   
-  modalContent.style.height = `${postSectionHeight}px`;
 }
 
 function openCommentSection(event) {
@@ -627,7 +638,7 @@ function openCommentSection(event) {
 
   postsFeed.insertAdjacentHTML("afterbegin", postContent);
   
-  setModalContentHeight();
+  setCommentSectionHeight();
 }
 
 // on save post button click trigger this function
@@ -654,6 +665,9 @@ function showExplanation(event) {
   isSolutionContentHidden ? showSolutionButton.firstElementChild.style.rotate = "180deg" : showSolutionButton.firstElementChild.style.rotate = "0deg";
   // show or hide the solution content
   solutionContent.classList.toggle('hidden');
+  // console.log(solutionContent.innerText)
+  showSolutionButton.scrollIntoView({behavior: "smooth", block: "center"});
+  setCommentSectionHeight();
 }
 
 function evaluateUserAnswers(correspondingPost, questionType, entries, answerOptions) {
