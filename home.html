@@ -372,24 +372,33 @@
 
 // --------------------disable scrolling--------------------
 
-    let scrollingEnabled = true;
+  // let scrollingEnabled = true;
 
-    function disableScroll() {
-    // Get the current page scroll position
-    scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-    scrollLeft = window.pageXOffset || document.documentElement.scrollLeft,
+  // function disableScroll() {
+  //   // Get current page scroll position
+  //   const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+  //   const scrollLeft = window.pageXOffset || document.documentElement.scrollLeft,
 
-    // if any scroll is attempted,
-    // set this to the previous value
-    window.onscroll = function () {
-      window.scrollTo(scrollLeft, scrollTop);
-      log('scroll is triggered');
-    };
-  }
+  //   // if any scroll is attempted, set this to the previous value
+  //   window.onscroll = function () {
+  //     window.scrollTo(scrollLeft, scrollTop);
+  //   };
+  // }
 
-  function enableScroll() {
-    window.onscroll = function () { };
-  }
+  // const scrollingEnabled = true;
+
+  // function disableScroll() {
+  //   const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+  //   const scrollLeft = window.pageYOffset || document.documentElement.scrollTop;
+
+  //   window.onscroll = () => {
+  //     window.scrollTo(scrollLeft, scrollTop);
+  //   }
+  // }
+
+  // function enableScroll() {
+  //   window.onscroll = function () { };
+  // }
 
 // --------------------disable scrolling--------------------
 

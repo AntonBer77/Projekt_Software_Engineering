@@ -117,6 +117,21 @@ const currentUser =
   favoritePosts: []
 };
 
+// track scrolling behavior
+let scrollingEnabled = true;
+
+function disableScroll() {
+  const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+  const scrollLeft = window.pageYOffset || document.documentElement.scrollTop;
+
+  window.onscroll = () => {
+    window.scrollTo(scrollLeft, scrollTop);
+  }
+}
+
+function enableScroll() {
+  window.onscroll = function () { };
+}
 
 function randomizeBackground() {
   const backgroundColors = ['crimson', 'darkcyan', 'darkolivegreen', 'darkmagenta', 'darkslateblue', 'darkslategrey', 'green', 'midnightblue'];
@@ -178,6 +193,13 @@ function closeCommentSection(event) {
   const isTargetCloseButton = event.target.matches('.close-button');
 
   isTargetModal || isTargetCloseButton ? event.currentTarget.remove() : null;
+
+  if(isTargetModal || isTargetCloseButton) {
+    // enable scrolling
+    enableScroll();
+    // set scrolling state to true
+    scrollingEnabled = true;
+  }
 }
 
 // follow button adds a course to myFollowList[]
@@ -651,6 +673,11 @@ function openCommentSection(event) {
   postsFeed.insertAdjacentHTML("afterbegin", postContent);
   
   setCommentSectionHeight();
+
+  // check if scrolling is enabled and switch between on and off
+    scrollingEnabled ? disableScroll() : enableScroll();
+    // set scrolling state to true or false
+    scrollingEnabled = !scrollingEnabled;
 }
 
 // on save post button click trigger this function
@@ -819,7 +846,7 @@ postsFeed.addEventListener('submit', (e) => {
         <div class="answer-feedback-result ${userFeedback.color()}">${userFeedback.message()}</div>                
         <button class="show-solution-button button-ghost" onclick="showExplanation(event)"><i class="material-icons">keyboard_arrow_down</i>Erklärung anzeigen</button>
       </div>
-      <div class="solution-content hidden">${correspondingPost.explanation}</div>
+      <div class="solution-content hidden"><span class="solution-content-heading">Erklärung:</span>${correspondingPost.explanation}</div>
     </div>
     `;
     // render answer feedback container
@@ -882,30 +909,40 @@ postsFeed.addEventListener('submit', (e) => {
 
 
 document.body.addEventListener('click', (event) => {
-
-  // console.log(event)
-
+  // if user clicks on the sort button run this code
   if(event.target.matches('.sort-button')) {
-    // const likes = []
-    
-    // posts.forEach((post) => {
-    //   likes.push(post.likes)
-    // })
-
     const popover = event.target.nextElementSibling;
     const popoverContent = event.target.parentElement.lastElementChild;
 
+    // toggle focused class for the sort button
+    event.target.classList.toggle('sort-button-focused');
+    // change z-index of the sort button
+    event.target.classList.toggle('z-index-200');
+    // hide or show popover & popover-content
     popover.classList.toggle('hidden');
     popoverContent.classList.toggle('hidden');
-    
-    
+
+    // check if scrolling is enabled and switch between on and off
+    scrollingEnabled ? disableScroll() : enableScroll();
+    // set scrolling state to true or false
+    scrollingEnabled = !scrollingEnabled;
   }
   
   if(event.target.matches('.popover')) {
     const popoverContent = event.target.nextElementSibling;
     
+    // change z-index of the sort button
+    event.target.previousElementSibling.classList.toggle('z-index-200');
+    // remove focused class
+    event.target.previousElementSibling.classList.toggle('sort-button-focused');
+    // hide popover & popover-content
     event.target.classList.toggle('hidden');
     popoverContent.classList.toggle('hidden');
+
+    // enable scrolling
+    enableScroll();
+    // set scrolling state to true
+    scrollingEnabled = true;
   }
 })
 
@@ -916,20 +953,24 @@ document.body.addEventListener('submit', (event) => {
 
     const popover = event.target.parentElement.previousElementSibling;
     const popoverContent = event.target.parentElement;
+    const sortButton = event.target.parentElement.previousElementSibling.previousElementSibling;
 
     // collect user input
     const formData = new FormData(event.target);
     const entries = Object.fromEntries(formData.entries());
-
     const sortBy = entries.sortBy;
     const sortOrder = entries.sortOrder;
-    const descendingOrder = sortOrder === "descending" ? true : false;
-    let sortedFeed;
-    // console.log(sortBy, sortOrder)
 
+    // check if user selected descending or ascending order
+    const descendingOrder = sortOrder === "descending" ? true : false;
+    
+    // create a new array from posts with new sort order
+    let sortedFeed;
+
+    // sort posts based on user selection
     switch (sortBy) {
       case "date":
-        
+        // check order type and sort by order type
         descendingOrder ? 
         sortedFeed = posts.toSorted((a, b) => {
           return b.postDate - a.postDate;
@@ -963,11 +1004,22 @@ document.body.addEventListener('submit', (event) => {
         break;
     }
     
-    
+    // delete previous post feed    
     postsFeed.innerHTML = "";
+    // render new post feed
     renderPostFeed(sortedFeed);
 
-    // event.target.reset();
+    // enable scrolling
+    enableScroll();
+
+    // set scrolling state to true
+    scrollingEnabled = true;
+
+    // change z-index of the sort button to initial
+    sortButton.classList.toggle('z-index-200');
+    // remove focused classed
+    sortButton.classList.toggle('sort-button-focused');
+    // hide popover & popover-content
     popover.classList.toggle('hidden');
     popoverContent.classList.toggle('hidden');
   }
