@@ -10,7 +10,7 @@ const users = [
 const currentUser = 
 {
   username: "Tester",
-  userPicture: randomizeBackground(),
+  userPicture: "Crimson",
   followList : ['Requirements Engineering', "Wissenschaftliches Arbeiten", "Finanzierung"], // equals posts.course
   posts: ["post-1"], // equals posts.postID
   comments: [],
