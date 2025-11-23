@@ -914,6 +914,7 @@ if(sessionStorage.getItem('posts') === null) {
   posts = JSON.parse(sessionStorage.getItem('posts'));  
 }
 
+
 // if session storage has postAdded item then show success message
 if(sessionStorage.getItem('postAdded') !== null) {
   // inform the user about action success
