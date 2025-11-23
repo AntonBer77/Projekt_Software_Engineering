@@ -3,27 +3,36 @@
 
 // dummy users database
 const users = [
-  {username: "tester", email: "tester@iu.org", password: "1234"},
-  {username: "tutor", email: "tutor@iu.org", password: "tutor1234567"}
+  {
+    username: "Tester",
+    userPicture: "crimson",
+    followList: ['Requirements Engineering', "IT-Management", "Data Analytics"], // equals posts.course
+    posts: ["post-1"], // equals posts.postID
+    likedPosts: [],
+    comments: [],
+    favoritePosts: [],
+    email: "tester@iu.org", 
+    password: "1234"
+  },
+  {
+    username: "Tutor",
+    userPicture: "darkcyan",
+    followList: [], // equals posts.course
+    posts: [], // equals posts.postID
+    likedPosts: [],
+    comments: [],
+    favoritePosts: [],
+    email: "tutor@iu.org", 
+    password: "tutor1234567"
+  }
 ];
 
-let currentUser = 
-{
-  username: "Tester",
-  userPicture: "crimson",
-  followList : ['Requirements Engineering', "Wissenschaftliches Arbeiten", "Finanzierung"], // equals posts.course
-  posts: ["post-1"], // equals posts.postID
-  likedPosts: [],
-  comments: [],
-  favoritePosts: []
-};
-
-sessionStorage.setItem('currentUser', JSON.stringify(currentUser));
-
+// ========================================user login validation process========================================
 
 const loginForm = document.querySelector("#login-form");
 const loginEmail = document.querySelector("#login-e-mail");
 const loginPassword = document.querySelector("#login-password");
+
 
 // track state changes for input-fields
 let errorMessageActive = false;
@@ -76,8 +85,21 @@ loginForm.addEventListener('submit', (e) => {
     inputFieldError.classList.toggle('input-field-error');
     inputFieldErrorMessage.classList.toggle('hidden');
 
-  // if all inputs valid go to homepage
+  // if all inputs valid setup currentUser and go to homepage
   } else {
+    let currentUser = 
+    {
+      username: validUser.username,
+      userPicture: validUser.userPicture,
+      followList : validUser.followList, // equals posts.course
+      posts: validUser.posts, // equals posts.postID
+      likedPosts: validUser.likedPosts,
+      comments: validUser.comments,
+      favoritePosts: validUser.favoritePosts
+    };
+    
+    // remember logged in user with session storage
+    sessionStorage.setItem('currentUser', JSON.stringify(currentUser));
     location.assign('home.html');
   }
 })

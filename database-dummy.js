@@ -1,16 +1,5 @@
-// --------------------dieser Bereich befindet sich noch in Arbeit--------------------
-// bisher implementiert:
-//  dynamisches Laden von Beiträgen aus einer Dummy-Datenbank,
-//  Folgen-Knopf wird nur für nicht gefolgte Kurse angezeigt, nach Klick wird der Kurs der myFollowsList[] hinzugefügt (keine persistente Speicherung, da keine echte Datenbank) und danach deaktiviert
-//  Antwortmöglichkeiten auswählen mit visuellem Feedback,
-//  Auswerten-Knopf blendet die Erklärung und Antwort-Feedback ein,
-//  nach Auswertung werden Antwortmöglichkeiten deaktiviert
-//  Multiple-Choice-Fragen lassen sich auswerten
-//  Wahr-oder-Falsch-Fragen lassen sich auswerten
-//  Like-Button animiert, verändert den Zähler beim Klick
-//  Beitrag-speichern-Button animiert, noch keine Funktion
-//  Erklärung lässt sich ein- und ausblenden
 
+// dummy posts database
 let posts = [
   {
     postID: "post-1",
@@ -42,107 +31,899 @@ let posts = [
   },
   {
     postID: "post-2",
-    postDate: new Date("2025-10-28T12:20:11Z"),
-    author: "Max Mustermann",
-    degree: "B.Sc. Wirtschaftsinformatik",
-    course: "Finanzierung",
+    postDate: new Date("2025-09-04T11:22:09Z"),
+    author: "Chef",
+    degree: "B.Sc. Informatik",
+    course: "Gestaltung und Ergonomie von User Interfaces",
     questionType: "Multiple-Choice",
-    question: "Maximale Länge soll auf 400 Chars limitiert werden. A wonderful serenity has taken possession of my entire soul, like these sweet mornings of spring which I enjoy with my whole heart. I am alone, and feel the charm of existence in this spot, which was created for the bliss of souls like mine. I am so happy, my dear friend, so absorbed in the exquisite sense of mere tranquil existence, that I negle", 
-    answers: ["Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts. Separated they live in Bookmarksgrove right at the coast of the Semantics, a large.", "Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts. Separated they live in Bookmarksgrove right at the coast of the Semantics, a large.", "Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts. Separated they live in Bookmarksgrove right at the coast of the Semantics, a large.", "Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts. Separated they live in Bookmarksgrove right at the coast of the Semantics, a large."], 
-    correctAnswer: ["answer2", "answer3"],
-    explanation: "Hier steht die Erklärung. Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quasi saepe ea eos! Nihil laboriosam repellat eaque necessitatibus soluta ipsam neque, voluptates libero, suscipit minima reprehenderit vel tempore a quod deserunt adipisci voluptatibus sit sequi modi aliquid non voluptas autem. Nobis cum fuga, ducimus quas unde natus repudiandae consequuntur exercitationem sed laudantium aperiam alias illo harum, a consequatur dolorum sequi dignissimos rem deserunt eligendi ab suscipit eveniet! Exercitationem in quaerat eligendi ex corporis? Quis iure illum officiis. Optio minima aliquid sed dolore quisquam, voluptate ex nesciunt nisi distinctio, est hic fuga similique eum repellendus cum non mollitia eaque laudantium eos sequi earum sint ducimus asperiores? Eligendi quia ullam aliquid obcaecati veniam architecto consequuntur aperiam aliquam minima exercitationem nostrum, earum officia! A maiores quod itaque at, culpa totam sunt natus fugiat unde omnis sequi voluptas est dolorum, perspiciatis facere suscipit illo cumque sint autem. Mollitia nulla accusamus atque quaerat iure magnam cumque, voluptatem laborum id nisi perspiciatis ad beatae sapiente porro, delectus alias sunt optio tenetur corporis fugit illum saepe voluptatibus necessitatibus similique. Quia, blanditiis esse, aliquam provident, possimus earum expedita fuga iste rerum corrupti eligendi inventore laborum architecto minima id! Tenetur rerum hic, sed necessitatibus optio sapiente assumenda modi at aperiam. Sequi nisi adipisci saepe unde a, accusamus vel consequuntur quos. Fuga autem suscipit laborum ratione magnam, ad repellendus voluptatem similique obcaecati delectus nemo reprehenderit. Ratione quam qui illo expedita quibusdam perspiciatis, molestias tempora ipsam id praesentium accusamus. Aliquam repudiandae hic beatae placeat animi a distinctio nihil blanditiis sapiente, nostrum, quo omnis. Illo nulla, et magni quas ut aspernatur ipsam tenetur vel nemo ab ipsum, velit alias consequuntur dolorem aliquam eaque voluptatem dolor! Aliquam, explicabo vitae. Cum, eius obcaecati! Facilis minima totam quisquam accusantium iste eos ea, numquam ducimus temporibus error animi, assumenda incidunt odit quae, libero similique adipisci enim eum.",
+    question: "Als Webdesigner hast du den Auftrag erhalten, eine Onlinepräsenz für das Rathaus deines Ortes zu entwerfen. Welcher der folgenden Punkte sind bei der Gestaltung rechtlich bindend?",  
+    answers: ["Responsive Design", "Flat Design", "Barrierefreiheit", "Natural Mapping"],
+    correctAnswer: ["answer3"],
+    explanation: "Responsives Design, Flat Design und Natural Mapping sind wichtige Konzepte, allerdings ist nur die Barrierefreiheit rechtlich binded.",
     privatePost: false,
-    likes: 25,
+    likes: 2,
     comments: [
       {
-        username: "Andrea Berg", 
+        username: "Seppl", 
         userPicture: randomizeBackground(),
-        postDate: new Date("2025-11-11T23:24:12Z"), 
-        content: "Sehr interessanter Beitrag. Bitte mehr davon."
+        postDate: new Date("2025-09-04T12:13:28Z"), 
+        content: "Das muss ich wohl nochmal wiederholen."
       },
       {
-        username: "Felix Blume", 
+        username: "Brummbär", 
         userPicture: randomizeBackground(),
-        postDate: new Date("2025-11-12T11:14:55Z"), 
-        content: "Ich war mir sicher, dass Antwort 4 die richtige sei. Man lernt wohl nie aus."
-      }, 
-      {
-        username: "Andrea Berg", 
-        userPicture: randomizeBackground(),
-        postDate: new Date("2025-11-11T23:24:12Z"), 
-        content: "Sehr interessanter Beitrag. Bitte mehr davon."
-      },
-      {
-        username: "Felix Blume", 
-        userPicture: randomizeBackground(),
-        postDate: new Date("2025-11-12T11:14:55Z"), 
-        content: "Ich war mir sicher, dass Antwort 4 die richtige sei. Man lernt wohl nie aus."
-      }, 
-      {
-        username: "Andrea Berg", 
-        userPicture: randomizeBackground(),
-        postDate: new Date("2025-11-11T23:24:12Z"), 
-        content: "Sehr interessanter Beitrag. Bitte mehr davon."
-      },
-      {
-        username: "Felix Blume", 
-        userPicture: randomizeBackground(),
-        postDate: new Date("2025-11-12T11:14:55Z"), 
-        content: "Ich war mir sicher, dass Antwort 4 die richtige sei. Man lernt wohl nie aus."
+        postDate: new Date("2025-09-04T12:14:55Z"), 
+        content: "Ist doch klar, dass es die Barrierefreiheit ist."
       } 
     ]
   },
   {
     postID: "post-3",
-    postDate: new Date("2025-10-22T17:21:41Z"),
-    author: "Max Mustermann",
-    degree: "B.Sc. Wirtschaftsinformatik",
-    course: "Seminar Software Engineering",
-    questionType: "Wahr-oder-Falsch",
-    question: "Diese Aussage ist wahr",  
-    correctAnswer: ["trueStatement"],
-    explanation: "Hier steht die Erklärung",
+    postDate: new Date("2025-08-04T07:04:41Z"),
+    author: "Mufasa",
+    degree: "B.Sc. Architektur",
+    course: "Konstruktivsysteme und Tragwerkplanung",
+    questionType: "Multiple-Choice",
+    question: "Welchen Belastungen kann ein tragendes Bauteil abgesehen der Eigenlast noch ausgesetzt sein?",  
+    answers: ["Nutzlast", "Winddruck", "Erddruck", "Zuglast"],
+    correctAnswer: ["answer1", "answer2", "answer3"],
+    explanation: "Nutzlast, Winddruck und Erddruck sind richtig. Die Zuglast ist das maximale Gewicht, das ein Fahrzeug ziehen darf, um ein sicheres Gespann zu gewährleisten",
     privatePost: false,
-    likes: 14,
-    comments: []
-  }
+    likes: 1,
+    comments: [
+      {
+        username: "Scar", 
+        userPicture: randomizeBackground(),
+        postDate: new Date("2025-08-07T06:55:13Z"), 
+        content: "Das ist doch einfach. Wie wäre es mal mit herausfordernden Aufgaben!?."
+      },
+      {
+        username: "Simba", 
+        userPicture: randomizeBackground(),
+        postDate: new Date("2025-11-12T11:14:55Z"), 
+        content: "Tolle Fragenstellung Mufasa! Bist mein Vorbild! Und hör nicht drauf, was dieser Scar sagt."
+      } 
+    ]
+  },
+  {
+    postID: "post-4",
+    postDate: new Date("2025-11-01T10:08:12Z"),
+    author: "Manfred",
+    degree: "B.Sc. Architektur",
+    course: "Baustoffkunde",
+    questionType: "Wahr-oder-Falsch",
+    question: "Holz ist ein anorganischer Baustoff.",  
+    correctAnswer: ["falseStatement"],
+    explanation: "Falsch, da Holz ein organischer Stoff ist. Anorganische Stoffe sind z.B. Natursteine und Aluminium.",
+    privatePost: false,
+    likes: 120,
+    comments: [
+      {
+        username: "Sid", 
+        userPicture: randomizeBackground(),
+        postDate: new Date("2025-11-01T10:09:01Z"), 
+        content: "Manni! Mal wieder eine Frage von dir. Danke, die hat mir noch gefehlt!"
+      },
+      {
+        username: "Diego", 
+        userPicture: randomizeBackground(),
+        postDate: new Date("2025-11-02T05:48:39Z"), 
+        content: "Echt einfach!"
+      }, 
+      {
+        username: "CrashundEddie", 
+        userPicture: randomizeBackground(),
+        postDate: new Date("2025-11-03T08:37:05Z"), 
+        content: "Ich und mein Holz!"
+      },
+      {
+        username: "Manfred", 
+        userPicture: randomizeBackground(),
+        postDate: new Date("2025-11-03T09:05:05Z"), 
+        content: "@CrashundEddie sehr qualifizierter Kommentar. Wenigstens hilft's dem Algorithmus."
+      }  
+    ]
+  },
+  {
+    postID: "post-5",
+    postDate: new Date("2025-09-15T16:04:18Z"),
+    author: "Elsa",
+    degree: "B.A. Marketing",
+    course: "Sales und Distribution",
+    questionType: "Multiple-Choice",
+    question: "Ein Handelsvertreter beschreibt einen...",  
+    answers: ["direkten Vertriebsweg", "indirekten Vertriebsweg"],
+    correctAnswer: ["answer2"],
+    explanation: "Der Handelsvertreter ist nicht der Hersteller, sondern er vertreibt lediglich die Ware. Daher ist der Vertriebsweg indirekt.",
+    privatePost: false,
+    likes: 6,
+    comments: [
+      {
+        username: "Olaf", 
+        userPicture: randomizeBackground(),
+        postDate: new Date("2025-09-15T20:56:28Z"), 
+        content: "Hatte ich direkt richtig! Wieder einen Schritt näher zum Handelsvertreter für Eis näher!"
+      },
+      {
+        username: "Anna", 
+        userPicture: randomizeBackground(),
+        postDate: new Date("2025-09-16T08:12:23Z"), 
+        content: "Super @Olaf freut mich für dich!"
+      } 
+    ]
+  },
+  {
+    postID: "post-6",
+    postDate: new Date("2025-08-04T07:04:41Z"),
+    author: "Elsa",
+    degree: "B.A. Marekting",
+    course: "Preispolitik",
+    questionType: "Wahr-oder-Falsch",
+    question: "Loyale Käufer kaufen zu möglichst geringen Preisen, sofern die Ware ihren Anforderungen entspricht.",  
+    correctAnswer: ["falseStatement"],
+    explanation: "Falsch, da die Eigenschaft preisorientierten Käufern zugewieden wird.",
+    privatePost: false,
+    likes: 18,
+    comments: [
+      {
+        username: "Anna", 
+        userPicture: randomizeBackground(),
+        postDate: new Date("2025-08-07T13:05:05Z"), 
+        content: "Danke, deine Fragen helfen mir echt beim Lernen!"
+      }
+    ]
+  },
+  {
+    postID: "post-7",
+    postDate: new Date("2025-08-04T07:04:41Z"),
+    author: "Elsa",
+    degree: "B.Sc. Architektur",
+    course: "Baustoffkunde",
+    questionType: "Multiple-Choice",
+    question: "Welche der folgenden Stoffe ist nicht Bestandteil von Holz?",  
+    answers: ["Zellulose", "Lignin", "Hemicellulose", "Calciumsilikat"],
+    correctAnswer: ["answer1", "answer2", "answer3"],
+    explanation: "Calciumsilikat ist falsch. Das ist ein Bestandteil von Zement.",
+    privatePost: false,
+    likes: 3,
+    //* Hierzu soll es keine Kommentare geben
+    comments: [
+    ]
+  },
+  {
+  postID: "post-8",
+  postDate: new Date("2025-06-18T09:22:14Z"),
+  author: "Jonas",
+  degree: "M.Sc. Wirtschaftsinformatik",
+  course: "IT-Management",
+  questionType: "Multiple-Choice",
+  question: "Welcher Begriff gehört nicht zur agilen Softwareentwicklung?",
+  answers: ["Scrum", "Kanban", "Wasserfallmodell", "Product Owner"],
+  correctAnswer: ["answer3"],
+  explanation: "Das Wasserfallmodell gehört nicht zur agilen Softwareentwicklung.",
+  privatePost: false,
+  likes: 0,
+  comments: [
+    {
+      username: "Lara",
+      userPicture: randomizeBackground(),
+      postDate: new Date("2025-06-19T15:47:09Z"),
+      content: "Das war eine schöne Erinnerungsfrage – danke!"
+    }
+  ]
+},
+{
+  postID: "post-9",
+  postDate: new Date("2025-05-12T08:44:19Z"),
+  author: "Clara",
+  degree: "M.Sc. Wirtschaftsinformatik",
+  course: "IT-Management",
+  questionType: "Wahr-oder-Falsch",
+  question: "ERP-Systeme dienen der Planung und Steuerung betrieblicher Ressourcen.",
+  correctAnswer: ["falseStatement"],
+  explanation: "ERP-Systeme integrieren verschiedene Unternehmensbereiche und unterstützen dadurch die Planung und Steuerung zentraler Ressourcen.",
+  privatePost: false,
+  likes: 12,
+  comments: [
+    {
+      username: "Felix",
+      userPicture: randomizeBackground(),
+      postDate: new Date("2025-05-12T10:01:03Z"),
+      content: "War mir nicht sicher – dachte, ERP wäre eher für Buchhaltung und Finanzen."
+    },
+    {
+      username: "Nina",
+      userPicture: randomizeBackground(),
+      postDate: new Date("2025-05-12T10:26:55Z"),
+      content: "Finanzen sind auch ein Teil davon, aber ERP deckt deutlich mehr Bereiche ab."
+    },
+    {
+      username: "Tobias",
+      userPicture: randomizeBackground(),
+      postDate: new Date("2025-05-12T11:14:42Z"),
+      content: "Genau, z. B. auch Personal, Logistik oder Produktion."
+    },
+    {
+      username: "Sarah",
+      userPicture: randomizeBackground(),
+      postDate: new Date("2025-05-12T12:03:17Z"),
+      content: "Dann stimmt die Aussage ja eigentlich komplett, oder?"
+    },
+    {
+      username: "Clara",
+      userPicture: randomizeBackground(),
+      postDate: new Date("2025-05-12T12:47:31Z"),
+      content: "Ja, genau! ERP-Systeme bündeln Daten aus vielen Bereichen, um Ressourcen besser planen und steuern zu können – deshalb ist die Aussage wahr."
+    }
+  ]
+},
+{
+  postID: "post-10",
+  postDate: new Date("2025-04-20T09:35:12Z"),
+  author: "Leonie",
+  degree: "M.Sc. Wirtschaftsinformatik",
+  course: "Data Analytics",
+  questionType: "Multiple-Choice",
+  question: "Was versteht man unter „Data Warehouse“?",
+  answers: [
+    "Ein Echtzeit-Transaktionssystem",
+    "Eine zentrale Datenbank für analytische Auswertungen",
+    "Eine Software zur grafischen Darstellung von Daten",
+    "Ein Speichersystem für Backups"
+  ],
+  correctAnswer: ["answer2"],
+  explanation: "Ein Data Warehouse ist eine zentrale Datenbank, die große Datenmengen aus verschiedenen Quellen für analytische Auswertungen sammelt und strukturiert.",
+  privatePost: false,
+  likes: 27,
+  comments: [
+    {
+      username: "Jonas",
+      userPicture: randomizeBackground(),
+      postDate: new Date("2025-04-20T10:12:45Z"),
+      content: "Interessante Frage, danke!"
+    },
+    {
+      username: "Mia",
+      userPicture: randomizeBackground(),
+      postDate: new Date("2025-04-20T10:45:32Z"),
+      content: "Gut zu wissen, dass das Data Warehouse zentral für Analysen ist."
+    }
+  ]
+},
+{
+  postID: "post-11",
+  postDate: new Date("2025-03-18T14:20:00Z"),
+  author: "Tim",
+  degree: "M.Sc. Wirtschaftsinformatik",
+  course: "Grundlagen der Wirtschaftsinformatik",
+  questionType: "Multiple-Choice",
+  question: "Welche Aussage beschreibt das Ziel der Wirtschaftsinformatik am besten?",
+  answers: [
+    "Entwicklung von Betriebssystemen für Supercomputer",
+    "Optimierung der Kommunikation zwischen Mensch und Maschine",
+    "Integration von Informations- und Kommunikationssystemen in betriebliche Prozesse",
+    "Theoretische Erforschung von Hardwarearchitekturen"
+  ],
+  correctAnswer: ["answer3"],
+  explanation: "Das Ziel der Wirtschaftsinformatik ist die Integration von Informations- und Kommunikationssystemen in betriebliche Prozesse, um diese effizienter zu gestalten.",
+  privatePost: false,
+  likes: 9,
+  comments: [
+    {
+      username: "Laura",
+      userPicture: randomizeBackground(),
+      postDate: new Date("2025-03-18T15:05:30Z"),
+      content: "Interessant, Integration ist also zentral für die Wirtschaftsinformatik."
+    }
+  ]
+},
+{
+  postID: "post-12",
+  postDate: new Date("2025-02-10T11:15:00Z"),
+  author: "Sophie",
+  degree: "M.Sc. Wirtschaftsinformatik",
+  course: "Grundlagen der Wirtschaftsinformatik",
+  questionType: "Wahr-oder-Falsch",
+  question: "Wirtschaftsinformatik beschäftigt sich ausschließlich mit der Programmierung von Software.",
+  correctAnswer: ["falseStatement"],
+  explanation: "Wirtschaftsinformatik umfasst nicht nur Programmierung, sondern auch die Analyse, Gestaltung und Optimierung von Informations- und Kommunikationssystemen in Unternehmen.",
+  privatePost: false,
+  likes: 7,
+  comments: [
+    {
+      username: "Max",
+      userPicture: randomizeBackground(),
+      postDate: new Date("2025-02-10T12:02:10Z"),
+      content: "Ah, gut zu wissen – dachte zuerst, es sei nur Programmierung."
+    },
+    {
+      username: "Sophie",
+      userPicture: randomizeBackground(),
+      postDate: new Date("2025-02-10T12:45:50Z"),
+      content: "Genau, es geht um alle Aspekte von IT-Systemen im Unternehmenskontext."
+    }
+  ]
+},
+{
+  postID: "post-13",
+  postDate: new Date("2025-01-25T09:40:00Z"),
+  author: "Philipp",
+  degree: "M.Sc. Wirtschaftsinformatik",
+  course: "Data Analytics",
+  questionType: "Multiple-Choice",
+  question: "Was versteht man unter „Data Warehouse“?",
+  answers: [
+    "Ein Echtzeit-Transaktionssystem",
+    "Eine zentrale Datenbank für analytische Auswertungen",
+    "Eine Software zur grafischen Darstellung von Daten",
+    "Ein Speichersystem für Backups"
+  ],
+  correctAnswer: ["answer2"],
+  explanation: "Ein Data Warehouse ist eine zentrale Datenbank, die große Datenmengen aus verschiedenen Quellen für analytische Auswertungen sammelt und strukturiert.",
+  privatePost: false,
+  likes: 15,
+  comments: [
+    {
+      username: "Lena",
+      userPicture: randomizeBackground(),
+      postDate: new Date("2025-01-25T10:15:20Z"),
+      content: "Ah, jetzt verstehe ich den Unterschied zu Echtzeit-Systemen."
+    },
+    {
+      username: "Philipp",
+      userPicture: randomizeBackground(),
+      postDate: new Date("2025-01-25T10:45:50Z"),
+      content: "Richtig, ein Data Warehouse dient ausschließlich analytischen Zwecken."
+    }
+  ]
+},
+{
+  postID: "post-14",
+  postDate: new Date("2025-01-10T08:50:00Z"),
+  author: "Amelie",
+  degree: "M.Sc. Wirtschaftsinformatik",
+  course: "Data Analytics",
+  questionType: "Wahr-oder-Falsch",
+  question: "Künstliche Intelligenz in der Wirtschaftsinformatik wird ausschließlich für Marketingzwecke eingesetzt.",
+  correctAnswer: ["falseStatement"],
+  explanation: "KI wird in der Wirtschaftsinformatik für viele Bereiche eingesetzt, z. B. Prozessoptimierung, Datenanalyse, Kundenservice und nicht nur für Marketing.",
+  privatePost: false,
+  likes: 9,
+  comments: [
+    {
+      username: "Leon",
+      userPicture: randomizeBackground(),
+      postDate: new Date("2025-01-10T09:30:25Z"),
+      content: "Ah, ich dachte erst, es sei nur Marketing, danke für die Klarstellung!"
+    },
+    {
+      username: "Amelie",
+      userPicture: randomizeBackground(),
+      postDate: new Date("2025-01-10T10:05:40Z"),
+      content: "Genau, KI wird in vielen Bereichen angewendet, nicht nur Marketing."
+    }
+  ]
+},
+{
+  postID: "post-15",
+  postDate: new Date("2025-01-05T11:10:00Z"),
+  author: "Fabian",
+  degree: "M.Sc. Wirtschaftsinformatik",
+  course: "Grundlagen der Wirtschaftsinformatik",
+  questionType: "Multiple-Choice",
+  question: "Welche Aussage beschreibt das Ziel der Wirtschaftsinformatik am besten?",
+  answers: [
+    "Entwicklung von Betriebssystemen für Supercomputer",
+    "Optimierung der Kommunikation zwischen Mensch und Maschine",
+    "Integration von Informations- und Kommunikationssystemen in betriebliche Prozesse",
+    "Theoretische Erforschung von Hardwarearchitekturen"
+  ],
+  correctAnswer: ["answer3"],
+  explanation: "Das Ziel der Wirtschaftsinformatik ist die Integration von Informations- und Kommunikationssystemen in betriebliche Prozesse, um diese effizienter zu gestalten.",
+  privatePost: false,
+  likes: 11,
+  comments: [
+    {
+      username: "Clara",
+      userPicture: randomizeBackground(),
+      postDate: new Date("2025-01-05T11:45:12Z"),
+      content: "Interessant, die Integration in Prozesse ist also der zentrale Punkt."
+    },
+    {
+      username: "Fabian",
+      userPicture: randomizeBackground(),
+      postDate: new Date("2025-01-05T12:10:34Z"),
+      content: "Genau, es geht nicht nur um Technik, sondern um die Verbindung zu den Unternehmensprozessen."
+    }
+  ]
+},
+{
+  postID: "post-16",
+  postDate: new Date("2025-02-15T10:20:00Z"),
+  author: "Emilia",
+  degree: "M.Sc. Wirtschaftsinformatik",
+  course: "Grundlagen der Wirtschaftsinformatik",
+  questionType: "Wahr-oder-Falsch",
+  question: "Wirtschaftsinformatik beschäftigt sich ausschließlich mit der Programmierung von Software.",
+  correctAnswer: ["falseStatement"],
+  explanation: "Wirtschaftsinformatik umfasst nicht nur Programmierung, sondern auch Analyse, Gestaltung und Optimierung von Informations- und Kommunikationssystemen in Unternehmen.",
+  privatePost: false,
+  likes: 8,
+  comments: [
+    {
+      username: "Lukas",
+      userPicture: randomizeBackground(),
+      postDate: new Date("2025-02-15T11:05:22Z"),
+      content: "Ah, also geht es um viel mehr als nur Programmieren."
+    },
+    {
+      username: "Emilia",
+      userPicture: randomizeBackground(),
+      postDate: new Date("2025-02-15T11:40:10Z"),
+      content: "Genau, es geht auch um Analyse und Optimierung von IT-Systemen in Unternehmen."
+    }
+  ]
+},
+{
+  postID: "post-17",
+  postDate: new Date("2025-03-05T09:50:00Z"),
+  author: "Marie",
+  degree: "M.A. Soziale Arbeit",
+  course: "Theorien und Methoden der Sozialen Arbeit",
+  questionType: "Multiple-Choice",
+  question: "Welcher Ansatz steht im Mittelpunkt der systemischen Sozialarbeit?",
+  answers: [
+    "Individuelle Defizitorientierung",
+    "Fokus auf familiäre und soziale Systeme",
+    "Biologische Einflussfaktoren",
+    "Finanzielle Leistungsberechnung"
+  ],
+  correctAnswer: ["answer2"],
+  explanation: "Die systemische Sozialarbeit legt den Fokus auf das Zusammenspiel familiärer und sozialer Systeme, nicht auf einzelne Defizite oder biologische Faktoren.",
+  privatePost: false,
+  likes: 13,
+  comments: [
+    {
+      username: "Anna",
+      userPicture: randomizeBackground(),
+      postDate: new Date("2025-03-05T10:25:14Z"),
+      content: "Gut zu wissen, dass der systemische Ansatz das Ganze betrachtet!"
+    },
+    {
+      username: "Marie",
+      userPicture: randomizeBackground(),
+      postDate: new Date("2025-03-05T10:55:47Z"),
+      content: "Richtig, der Fokus liegt auf familiären und sozialen Systemen."
+    }
+  ]
+},
+{
+  postID: "post-18",
+  postDate: new Date("2025-04-02T08:30:00Z"),
+  author: "Jonas",
+  degree: "M.A. Soziale Arbeit",
+  course: "Theorien und Methoden der Sozialen Arbeit",
+  questionType: "Wahr-oder-Falsch",
+  question: "Soziale Gerechtigkeit ist ein zentrales Leitprinzip der Sozialarbeit.",
+  correctAnswer: ["trueStatement"],
+  explanation: "Soziale Gerechtigkeit bildet eine Grundlage der Sozialarbeit und dient der Förderung von Chancengleichheit und fairer Behandlung in der Gesellschaft.",
+  privatePost: false,
+  likes: 10,
+  comments: [
+    {
+      username: "Lara",
+      userPicture: randomizeBackground(),
+      postDate: new Date("2025-04-02T09:05:12Z"),
+      content: "Das leuchtet ein, soziale Gerechtigkeit ist wirklich zentral."
+    },
+    {
+      username: "Felix",
+      userPicture: randomizeBackground(),
+      postDate: new Date("2025-04-02T09:35:45Z"),
+      content: "Interessant, hätte nicht gedacht, dass es so ein Leitprinzip ist."
+    },
+    {
+      username: "Jonas",
+      userPicture: randomizeBackground(),
+      postDate: new Date("2025-04-02T10:00:30Z"),
+      content: "Ja, genau – es ist die Grundlage vieler sozialer Maßnahmen und Interventionen."
+    }
+  ]
+},
+{
+  postID: "post-19",
+  postDate: new Date("2025-05-08T10:15:00Z"),
+  author: "Sophie",
+  degree: "M.A. Soziale Arbeit",
+  course: "Sozialpolitik und rechtliche Grundlagen",
+  questionType: "Multiple-Choice",
+  question: "Welches Gesetz bildet in Deutschland die Grundlage für Kinder- und Jugendhilfe?",
+  answers: [
+    "BGB",
+    "SGB VIII",
+    "StGB",
+    "GG"
+  ],
+  correctAnswer: ["answer2"],
+  explanation: "Das SGB VIII regelt die Leistungen und Maßnahmen der Kinder- und Jugendhilfe in Deutschland.",
+  privatePost: false,
+  likes: 14,
+  comments: [
+    {
+      username: "Anna",
+      userPicture: randomizeBackground(),
+      postDate: new Date("2025-05-08T10:50:12Z"),
+      content: "Ah, also SGB VIII ist das zentrale Gesetz – danke für die Klarstellung!"
+    },
+    {
+      username: "Sophie",
+      userPicture: randomizeBackground(),
+      postDate: new Date("2025-05-08T11:20:35Z"),
+      content: "Richtig, alle Kinder- und Jugendhilfe-Maßnahmen beziehen sich auf das SGB VIII."
+    }
+  ]
+},
+{
+  postID: "post-20",
+  postDate: new Date("2025-06-12T09:40:00Z"),
+  author: "Leon",
+  degree: "M.A. Soziale Arbeit",
+  course: "Sozialpolitik und rechtliche Grundlagen",
+  questionType: "Wahr-oder-Falsch",
+  question: "Case Management beschreibt den individuellen Beratungsprozess im Einzelkontakt.",
+  correctAnswer: ["trueStatement"],
+  explanation: "Case Management fokussiert auf den individuellen Beratungsprozess und die gezielte Unterstützung von Klienten im Einzelkontakt.",
+  privatePost: false,
+  likes: 12,
+  comments: [
+    {
+      username: "Mia",
+      userPicture: randomizeBackground(),
+      postDate: new Date("2025-06-12T10:15:23Z"),
+      content: "Gut zu wissen, dass es so individuell abläuft."
+    },
+    {
+      username: "Felix",
+      userPicture: randomizeBackground(),
+      postDate: new Date("2025-06-12T10:40:12Z"),
+      content: "Ah, also immer persönlich auf den Klienten zugeschnitten."
+    },
+    {
+      username: "Lara",
+      userPicture: randomizeBackground(),
+      postDate: new Date("2025-06-12T11:05:45Z"),
+      content: "Interessant, dass es nicht gruppenbezogen ist."
+    },
+    {
+      username: "Leon",
+      userPicture: randomizeBackground(),
+      postDate: new Date("2025-06-12T11:30:10Z"),
+      content: "Genau, der Fokus liegt auf der individuellen Unterstützung jedes einzelnen Klienten."
+    }
+  ]
+},
+{
+  postID: "post-21",
+  postDate: new Date("2025-07-05T14:20:00Z"),
+  author: "Helena",
+  degree: "M.A. Soziale Arbeit",
+  course: "Profession und Organisation Sozialer Arbeit",
+  questionType: "Multiple-Choice",
+  question: "Was versteht man unter Empowerment in der Sozialarbeit?",
+  answers: [
+    "Kontrolle über Klienten durch Fachkräfte",
+    "Stärkung der Selbstbestimmung und Ressourcen der Klienten",
+    "Strenge Regelorientierung",
+    "Institutionelle Abhängigkeit"
+  ],
+  correctAnswer: ["answer2"],
+  explanation: "Beim Empowerment geht es darum, Menschen zu befähigen, ihre eigenen Ressourcen zu nutzen und Selbstbestimmung zu fördern.",
+  privatePost: false,
+  likes: 9,
+  comments: [
+    {
+      username: "Tobias",
+      userPicture: randomizeBackground(),
+      postDate: new Date("2025-07-05T15:02:10Z"),
+      content: "Empowerment ist echt ein Kernprinzip der Sozialarbeit!"
+    },
+    {
+      username: "Lena",
+      userPicture: randomizeBackground(),
+      postDate: new Date("2025-07-05T15:40:50Z"),
+      content: "Gut erklärt, das hilft mir beim Lernen."
+    },
+    {
+      username: "Helena",
+      userPicture: randomizeBackground(),
+      postDate: new Date("2025-07-05T16:05:30Z"),
+      content: "Freut mich, wenn es euch hilft! Empowerment ist wirklich zentral."
+    }
+  ]
+},
+{
+  postID: "post-22",
+  postDate: new Date("2025-08-18T09:25:00Z"),
+  author: "Marcel",
+  degree: "M.A. Soziale Arbeit",
+  course: "Profession und Organisation Sozialer Arbeit",
+  questionType: "Wahr-oder-Falsch",
+  question: "Supervision dient der Leistungsbewertung von Klienten.",
+  correctAnswer: ["falseStatement"],
+  explanation: "Supervision dient der Reflexion und Unterstützung von Fachkräften, nicht der Bewertung von Klienten.",
+  privatePost: false,
+  likes: 13,
+  comments: [
+    {
+      username: "Clara",
+      userPicture: randomizeBackground(),
+      postDate: new Date("2025-08-18T10:00:10Z"),
+      content: "Gut zu wissen! Ich dachte früher immer, es hätte mit Klientenbewertungen zu tun."
+    },
+    {
+      username: "Jonas",
+      userPicture: randomizeBackground(),
+      postDate: new Date("2025-08-18T10:25:40Z"),
+      content: "Ja, Supervision ist echt eher für Fachkräfte als für Klienten."
+    },
+    {
+      username: "Marie",
+      userPicture: randomizeBackground(),
+      postDate: new Date("2025-08-18T10:55:12Z"),
+      content: "Spannend, da wird viel missverstanden."
+    },
+    {
+      username: "Timo",
+      userPicture: randomizeBackground(),
+      postDate: new Date("2025-08-18T11:22:55Z"),
+      content: "Danke für die Erklärung, Marcel!"
+    },
+    {
+      username: "Marcel",
+      userPicture: randomizeBackground(),
+      postDate: new Date("2025-08-18T11:50:00Z"),
+      content: "Gerne! Supervision unterstützt uns als Fachkräfte bei Reflexion und Qualitätssicherung."
+    }
+  ]
+},
+{
+  postID: "post-23",
+  postDate: new Date("2025-09-03T13:10:00Z"),
+  author: "Nina",
+  degree: "M.A. Soziale Arbeit",
+  course: "Profession und Organisation Sozialer Arbeit",
+  questionType: "Multiple-Choice",
+  question: "Welche Aufgabe gehört zu den Kernfunktionen einer professionellen Sozialarbeit?",
+  answers: [
+    "Reine Verwaltungsarbeit",
+    "Hilfe zur Selbsthilfe",
+    "Juristische Vertretung der Klienten",
+    "Finanzielle Leistungsberechnung"
+  ],
+  correctAnswer: ["answer2"],
+  explanation: "Hilfe zur Selbsthilfe ist ein zentrales professionelles Prinzip der Sozialarbeit.",
+  privatePost: false,
+  likes: 11,
+  comments: [
+    {
+      username: "Sven",
+      userPicture: randomizeBackground(),
+      postDate: new Date("2025-09-03T14:00:12Z"),
+      content: "Genau, Selbsthilfe fördern ist super wichtig."
+    },
+    {
+      username: "Laura",
+      userPicture: randomizeBackground(),
+      postDate: new Date("2025-09-03T14:25:45Z"),
+      content: "Danke Nina! Gut zusammengefasst."
+    }
+  ]
+},
+{
+  postID: "post-24",
+  postDate: new Date("2025-04-22T10:50:00Z"),
+  author: "Carina",
+  degree: "M.A. Soziale Arbeit",
+  course: "Theorien und Methoden der Sozialen Arbeit",
+  questionType: "Wahr-oder-Falsch",
+  question: "Die Lebensweltorientierung betont die Perspektive der Klientinnen und Klienten im Alltag.",
+  correctAnswer: ["trueStatement"],
+  explanation: "Lebensweltorientierung berücksichtigt die alltäglichen Lebensbedingungen der Menschen.",
+  privatePost: false,
+  likes: 7,
+  comments: [
+    {
+      username: "Joel",
+      userPicture: randomizeBackground(),
+      postDate: new Date("2025-04-22T11:20:33Z"),
+      content: "Das macht die Arbeit auch so praxisnah."
+    }
+  ]
+},
+{
+  postID: "post-25",
+  postDate: new Date("2025-06-28T12:00:00Z"),
+  author: "Frida",
+  degree: "M.A. Soziale Arbeit",
+  course: "Sozialpolitik und rechtliche Grundlagen",
+  questionType: "Multiple-Choice",
+  question: "Was ist das Hauptziel der Sozialpolitik?",
+  answers: [
+    "Sicherstellung sozialer Gerechtigkeit",
+    "Reduzierung staatlicher Ausgaben",
+    "Förderung wirtschaftlicher Monopole",
+    "Ausschließliche Unterstützung von Großfamilien"
+  ],
+  correctAnswer: ["answer1"],
+  explanation: "Sozialpolitik zielt auf soziale Sicherheit und Gerechtigkeit ab.",
+  privatePost: false,
+  likes: 15,
+  comments: [
+    {
+      username: "Nora",
+      userPicture: randomizeBackground(),
+      postDate: new Date("2025-06-28T12:40:20Z"),
+      content: "Super Frage, hilft bei der Klausurvorbereitung!"
+    },
+    {
+      username: "Carla",
+      userPicture: randomizeBackground(),
+      postDate: new Date("2025-06-28T13:05:44Z"),
+      content: "Danke für die Erklärung!"
+    },
+    {
+      username: "Frida",
+      userPicture: randomizeBackground(),
+      postDate: new Date("2025-06-28T13:20:00Z"),
+      content: "Gerne! Sozialpolitik ist ein großes Feld."
+    }
+  ]
+},
+{
+  postID: "post-26",
+  postDate: new Date("2025-03-10T09:10:00Z"),
+  author: "Ben",
+  degree: "M.Sc. Wirtschaftsinformatik",
+  course: "Data Analytics",
+  questionType: "Wahr-oder-Falsch",
+  question: "Big Data umfasst ausschließlich strukturierte Daten.",
+  correctAnswer: ["falseStatement"],
+  explanation: "Big Data beinhaltet strukturierte, unstrukturierte und semi-strukturierte Daten.",
+  privatePost: false,
+  likes: 6,
+  comments: [
+    {
+      username: "Tara",
+      userPicture: randomizeBackground(),
+      postDate: new Date("2025-03-10T09:40:12Z"),
+      content: "Stimmt, unstrukturierte Daten machen ja sogar den Großteil aus!"
+    }
+  ]
+},
+{
+  postID: "post-27",
+  postDate: new Date("2025-01-25T08:50:00Z"),
+  author: "Oliver",
+  degree: "M.Sc. Wirtschaftsinformatik",
+  course: "Grundlagen der Wirtschaftsinformatik",
+  questionType: "Multiple-Choice",
+  question: "Welche Komponente gehört zu einem Informationssystem?",
+  answers: [
+    "Hardware",
+    "Ökologische Ressourcen",
+    "Biologische Systeme",
+    "Zufallsgeneratoren"
+  ],
+  correctAnswer: ["answer1"],
+  explanation: "Informationssysteme bestehen u.a. aus Hardware, Software, Daten, Prozessen und Menschen.",
+  privatePost: false,
+  likes: 9,
+  comments: [
+    {
+      username: "Sina",
+      userPicture: randomizeBackground(),
+      postDate: new Date("2025-01-25T09:20:00Z"),
+      content: "Endlich mal eine leichte Frage 😄"
+    },
+    {
+      username: "Lukas",
+      userPicture: randomizeBackground(),
+      postDate: new Date("2025-01-25T09:45:31Z"),
+      content: "Absolut richtig!"
+    }
+  ]
+},
+{
+  postID: "post-28",
+  postDate: new Date("2025-10-04T13:30:00Z"),
+  author: "David",
+  degree: "M.Sc. Wirtschaftsinformatik",
+  course: "IT-Management",
+  questionType: "Wahr-oder-Falsch",
+  question: "IT-Strategien sollen die Geschäftsstrategie eines Unternehmens unterstützen.",
+  correctAnswer: ["trueStatement"],
+  explanation: "IT-Strategien orientieren sich an den Unternehmenszielen und unterstützen Geschäftsfunktionen.",
+  privatePost: false,
+  likes: 17,
+  comments: [
+    {
+      username: "Tim",
+      userPicture: randomizeBackground(),
+      postDate: new Date("2025-10-04T14:05:11Z"),
+      content: "Ja, ohne IT-Strategie läuft im Business fast gar nichts mehr."
+    },
+    {
+      username: "Sarah",
+      userPicture: randomizeBackground(),
+      postDate: new Date("2025-10-04T14:25:44Z"),
+      content: "Das musste ich letztens auch fürs Projekt lernen!"
+    },
+    {
+      username: "David",
+      userPicture: randomizeBackground(),
+      postDate: new Date("2025-10-04T14:50:00Z"),
+      content: "Freut mich, dass es hilft!"
+    }
+  ]
+},
+{
+  postID: "post-29",
+  postDate: new Date("2025-03-30T11:35:00Z"),
+  author: "Verena",
+  degree: "M.A. Soziale Arbeit",
+  course: "Theorien und Methoden der Sozialen Arbeit",
+  questionType: "Multiple-Choice",
+  question: "Welcher Begriff beschreibt eine klassische Methode der Sozialen Arbeit?",
+  answers: [
+    "Konfliktmoderation",
+    "Meteorologische Diagnose",
+    "Buchhaltungsanalyse",
+    "Biomedizinische Intervention"
+  ],
+  correctAnswer: ["answer1"],
+  explanation: "Konfliktmoderation ist eine typische Methode zur Unterstützung sozialer Gruppen oder Einzelpersonen.",
+  privatePost: false,
+  likes: 12,
+  comments: [
+    {
+      username: "Pauline",
+      userPicture: randomizeBackground(),
+      postDate: new Date("2025-03-30T12:10:22Z"),
+      content: "Konfliktmoderation hatten wir erst letzte Woche!"
+    },
+    {
+      username: "Verena",
+      userPicture: randomizeBackground(),
+      postDate: new Date("2025-03-30T12:30:00Z"),
+      content: "Perfekt, dann passt die Frage ja gut rein 😊"
+    }
+  ]
+}
 ];
 
-let currentUser = 
-{
-  username: "Tester",
-  userPicture: "crimson",
-  followList : ['Requirements Engineering', "Wissenschaftliches Arbeiten", "Finanzierung"], // equals posts.course
-  posts: ["post-1"], // equals posts.postID
-  likedPosts: [],
-  comments: [],
-  favoritePosts: []
-};
+// get currentUser from session storage
+let currentUser = JSON.parse(sessionStorage.getItem('currentUser'));
 
 
-
-// check if session storage has posts then setup posts in the storage
+// check if session storage has no posts then setup posts in the storage
 if(sessionStorage.getItem('posts') === null) {
   sessionStorage.setItem("posts", JSON.stringify(posts));
 
-} else if(sessionStorage.getItem('postAdded')) { // if session storage has posts then update posts to include any changes on the posts item
-  posts = JSON.parse(sessionStorage.getItem('posts'));
+// if session storage has posts then update posts to include any changes on the posts item
+} else {
+  posts = JSON.parse(sessionStorage.getItem('posts'));  
+}
+
+// if session storage has postAdded item then show success message
+if(sessionStorage.getItem('postAdded')) {
   // inform the user about action success
   alertUser('Beitrag erfolgreich erstellt!');
   // after alert remove item from storage
   sessionStorage.removeItem('postAdded');
-  
-} else { // if session storage has posts then update posts to include any changes on the posts item
-  posts = JSON.parse(sessionStorage.getItem('posts'));  
 }
 
-// check if session storage has currentUser then setup currentUser in the storage
-if(sessionStorage.getItem('currentUser') === null) {
-  sessionStorage.setItem("currentUser", JSON.stringify(currentUser));
-  // if session storage has currentUser update currentUser to include any changes on the currentUser item
-} else {
-  currentUser = JSON.parse(sessionStorage.getItem('currentUser'));
-}
+
+// ========================================state tracking variables========================================
 
 // track currently rendered post feed
 let currentlyRenderedPosts;
@@ -150,6 +931,11 @@ let currentlyRenderedPosts;
 // track scrolling behavior
 let scrollingEnabled = true;
 
+
+
+// ========================================utility functions========================================
+
+// save current scrolling position and when user attemps to scroll go to saved position
 function disableScroll() {
   const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
   const scrollLeft = window.pageYOffset || document.documentElement.scrollTop;
@@ -157,12 +943,14 @@ function disableScroll() {
   window.onscroll = () => window.scrollTo(scrollLeft, scrollTop);
 };
 
-
+// revert scroll position capture
 function enableScroll() {
   window.onscroll = function () { };
 
 }
 
+
+// assign a randomized background color to user pictures
 function randomizeBackground() {
   const backgroundColors = ['crimson', 'darkcyan', 'darkolivegreen', 'darkmagenta', 'darkslateblue', 'darkslategrey', 'green', 'midnightblue'];
   
@@ -189,7 +977,7 @@ function timeSince(date) {
 
   for (const interval of intervals) {
     const count = Math.floor(seconds / interval.seconds);
-    
+    // check which label to display
     if (count >= 1) {
       switch(interval.label) {
         case "Jahr":
@@ -205,66 +993,35 @@ function timeSince(date) {
   }
     return "gerade eben";
 }
-    
-// --------------------load post feed--------------------
 
+
+// display a custom message after an event
+function alertUser(message) {
+  const feedbackMessage = 
+  `
+  <div class="action-feedback">${message}</div>
+  `;
+  
+  document.body.insertAdjacentHTML('afterbegin', feedbackMessage);
+  
+  setTimeout(() => {
+    document.body.firstElementChild.remove();
+  }, 3000);
+}
+
+
+
+// ========================================post feed rendering and post interactions========================================
+
+const postsFeed = document.getElementById('posts-feed');
 const tabs = document.getElementById('tabs');
 const tabsContent = document.getElementsByClassName('tabs-content');
 
-tabs.addEventListener('click', (event) => {
-  // if not current tab is clicked do this
-  if(event.target.matches('.tabs-item') && !event.target.classList.contains('current-tab')) {
-    const tabItems = Array.from(event.target.parentElement.children);
-    const currentTab = tabItems.find((tabItem) => {
-      return tabItem.matches('.current-tab');
-    })
-    const indexCurrentTab = tabItems.indexOf(currentTab);
-    const indexNewTab = tabItems.indexOf(event.target);
-
-    // switch between current tab items
-    currentTab.classList.toggle('current-tab');
-    event.target.classList.toggle('current-tab');
-    // switch between current tab content
-    tabsContent[indexCurrentTab].classList.toggle('current-tab-content');
-    tabsContent[indexNewTab].classList.toggle('current-tab-content');
-
-  }
-})
-
-
-const postsFeed = document.getElementById('posts-feed');
-
-function alertUser(message) {
-  const feedbackMessage = 
-    `
-    <div class="action-feedback">${message}</div>
-    `;
-
-    document.body.insertAdjacentHTML('afterbegin', feedbackMessage);
-    
-    setTimeout(() => {
-      document.body.firstElementChild.remove();
-    }, 3000);
-}
-
-function closeCommentSection(event) {
-  const isTargetModal = event.target.matches('.modal');
-  const isTargetCloseButton = event.target.matches('.close-button');
-
-  isTargetModal || isTargetCloseButton ? event.currentTarget.remove() : null;
-
-  if(isTargetModal || isTargetCloseButton) {
-    // enable scrolling
-    enableScroll();
-    // set scrolling state to true
-    scrollingEnabled = true;
-  }
-}
 
 // follow button adds a course to currentUser.followList[]
 function followCourse(e) {
   // get course name
-  let courseName = e.currentTarget.parentElement.firstElementChild.attributes[1].textContent;
+  let courseName = e.target.attributes['data-post-course'].value;
 
   // check if currentUser.followList[] includes this course
   let followed = currentUser.followList.includes(courseName);
@@ -279,7 +1036,7 @@ function followCourse(e) {
   }
 }
 
-// follow button is rendered when course is not followed
+// render follow button when course is not in currentUser.followList[]
 function renderFollowButton(post) {
   // check if the currentUser follows post.course
   let courseFollowed = currentUser.followList.includes(post.course);
@@ -289,17 +1046,18 @@ function renderFollowButton(post) {
   if(!courseFollowed) {                      
     followButton = `
     <span>&#128900;</span>
-    <div class="button-ghost" onclick="followCourse(event)">Folgen</div>                      
+    <div class="button-ghost" data-post-course="${post.course}" onclick="followCourse(event)">Folgen</div>                      
     `;
   }
   return followButton                    
 }
 
-
+// render post feed from provided posts dataset array
 function renderPostFeed(postsDataset) {
   let answerID = 1;
   let postAnswersFormID = 1;
   
+
   postsDataset.forEach((post) => {
     const postID = post.postID;
     let answerName = 1;
@@ -422,125 +1180,7 @@ function renderPostFeed(postsDataset) {
 
 }
 
-
-// when DOM content is loaded render post feed content
-document.addEventListener('DOMContentLoaded', () => {
-  
-  // render post feed for the home page
-  if (document.location.pathname.includes('home')) {
-    const homePostFeed = posts.filter((post) => {
-      return currentUser.followList.find((courseName) => courseName === post.course) 
-      || currentUser.posts.find((userPosts) => userPosts === post.postID) 
-      ? post : null;
-    })
-    // sort homePostFeed by date in descending order -> newest first
-    currentlyRenderedPosts = homePostFeed.sort((a, b) => { 
-      return new Date(b.postDate) - new Date(a.postDate);
-    });
-
-    renderPostFeed(currentlyRenderedPosts);    
-  }
-
-  // render post feed for the explore page
-  if (document.location.pathname.includes('explore')) {
-    const explorePostFeed = posts;
-    
-    // sort explorePostFeed by date in descending order -> newest first
-    currentlyRenderedPosts = explorePostFeed.sort((a, b) => { 
-      return new Date(b.postDate) - new Date(a.postDate);
-    });
-
-    renderPostFeed(currentlyRenderedPosts);
-  }
-
-  // render post feed for "my questions" page
-  if (document.location.pathname.includes('my-questions')) {
-    const myQuestionsPostFeed = posts.filter((post) => {
-      return currentUser.posts.find((postID) => postID === post.postID) ? post : null;
-    })
-    currentlyRenderedPosts = myQuestionsPostFeed.sort((a, b) => { 
-      return new Date(b.postDate) - new Date(a.postDate);
-    });
-
-    renderPostFeed(currentlyRenderedPosts);    
-  }
-
-  // render post feed for "my favorites" page
-  if (document.location.pathname.includes('my-favorites')) {
-    const favoritesPostFeed = posts.filter((post) => {
-      return currentUser.favoritePosts.find((postID) => postID === post.postID) ? post : null;
-    })
-    currentlyRenderedPosts = favoritesPostFeed.sort((a, b) => { 
-      return new Date(b.postDate) - new Date(a.postDate);
-    });
-
-    renderPostFeed(currentlyRenderedPosts);   
-  }
-
-
-})
-
-
-// listen for post interactions
-postsFeed.addEventListener('click', (e) => {
-  // check if click target is a checkbox input element
-  if(e.target.matches('.answer-option-input') && e.target.type === "checkbox") {
-    const answerOptions = Array.from(e.target.parentElement.parentElement.children);
-    const submitButton = e.target.parentElement.parentElement.parentElement.nextElementSibling;
-    
-    // toggle active selection class
-    e.target.parentElement.classList.toggle('answer-option-selected');
-    
-    // check if any selection was made
-    let selectionMade = answerOptions.some((answerOption) => {
-      return answerOption.matches('.answer-option-selected');
-    })
-    
-    // if any selection was made then activate the submit button else deactive submit button
-    selectionMade ? submitButton.classList.remove('button--inactive') : submitButton.classList.add('button--inactive')
-    
-  }
-  // check if click target is a radio input element
-  if(e.target.matches('.answer-option-input') && e.target.type === "radio") {
-    const answerOptions = Array.from(e.target.parentElement.parentElement.children);
-    const submitButton = e.target.parentElement.parentElement.parentElement.nextElementSibling;
-    
-    // check if target already selected
-    if (e.target.parentElement.matches('.answer-option-selected')) {
-      return
-    }
-    // if not selected do this
-    else {
-      // toggle selection class on the other option
-      answerOptions.forEach((option) => {
-        option.matches('.answer-option-selected') ? option.classList.toggle('answer-option-selected') : null;
-      })
-      // toggle selection class for current selection target
-      e.target.parentElement.classList.toggle('answer-option-selected');
-    }
-    
-    // check if any selection was made
-    let selectionMade = answerOptions.some((answerOption) => {
-      return answerOption.matches('.answer-option-selected');
-    })
-    
-    // if any selection was made then activate the submit button else deactive submit button
-    selectionMade ? submitButton.classList.remove('button--inactive') : submitButton.classList.add('button--inactive')    
-  }
-
-})
-
-postsFeed.addEventListener('input', (e) => {
-  // get input border height
-  let inputBorder = e.target.offsetHeight - e.target.clientHeight;
-
-  // set element's height to auto when input shrinks
-  e.target.style.height = "auto";
-
-  // set element's height when input grows
-  e.target.style.height = e.target.scrollHeight + inputBorder + "px";
-})
-
+// add or subtract from corresponding post.likes
 function toggleLike(list, id) {
   const index = list.indexOf(id);
 
@@ -596,6 +1236,7 @@ function likePost(event) {
     
 }
 
+// set comment section height based on inner contents
 function setCommentSectionHeight() {
   if(postsFeed.firstElementChild.children[1].children[1].matches('.comment-section')) {
     const postSectionHeight = postsFeed.firstElementChild.children[1].firstElementChild.clientHeight;
@@ -613,6 +1254,7 @@ function setCommentSectionHeight() {
   
 }
 
+// when user clicks on comment icon open comment section
 function openCommentSection(event) {
   const postID = event.currentTarget.attributes["data-post-id"].value;
   const correspondingPost = posts.find((post) => {
@@ -807,6 +1449,7 @@ function openCommentSection(event) {
   scrollingEnabled = !scrollingEnabled;
 }
 
+// add or delete post from currentUser.favoriteList[]
 function toggleFavorite(list, id) {
   const index = list.indexOf(id);
 
@@ -819,7 +1462,58 @@ function toggleFavorite(list, id) {
   return list;
 }
 
-// on save post button click trigger this function
+// ask user for confirmation before closing a page
+function confirmCancellation(event) {
+  const isTargetModal = event.target.matches('.modal');
+  const isTargetRejectButton = event.target.matches('.reject-button');
+  const isTargetConfirmButton = event.target.matches('.confirm-button');
+  
+  // check if click target is modal or reject button then close the alert
+  isTargetModal || isTargetRejectButton ? event.currentTarget.remove() : null;
+  // check if history exists then go back 1 page else go to home page
+  if (isTargetConfirmButton && history.length > 1) {
+    history.go(-1);
+  } else if(isTargetConfirmButton) {
+    location.assign('home.html');
+  }
+}
+
+// render modal with confirmation request
+function closePage() {
+  const body = document.body;
+  const alert = 
+  `
+  <div class="modal" onclick="confirmCancellation(event)">
+    <div class="alert">
+      <p class="alert-message">Sind Sie sicher, dass Sie die Änderungen verwerfen wollen?</p>
+      <div class="flex-container gap-2">
+        <button type="button" class="reject-button button-tertiary">Nicht abbrechen</button>
+        <button type="button" class="confirm-button button-primary">Ja, abbrechen</button>
+      </div>
+    </div>
+  </div>
+  `;
+
+  body.insertAdjacentHTML('afterbegin', alert);
+
+}
+
+// close opened comment section
+function closeCommentSection(event) {
+  const isTargetModal = event.target.matches('.modal');
+  const isTargetCloseButton = event.target.matches('.close-button');
+  
+  isTargetModal || isTargetCloseButton ? event.currentTarget.remove() : null;
+  
+  if(isTargetModal || isTargetCloseButton) {
+    // enable scrolling
+    enableScroll();
+    // set scrolling state to true
+    scrollingEnabled = true;
+  }
+}
+
+// save posts to currentUser's favoritePosts[]
 function savePost(event) {
   const saveButton = event.currentTarget;
   const animationItem = saveButton.children[1];
@@ -856,10 +1550,9 @@ function savePost(event) {
     alertUser('Sie können Ihren eigenen Beitrag nicht speichern');
   }
   
-
 }
 
-// on show explanation button click trigger this function
+// show explanation for corresponding post
 function showExplanation(event) {
   const showSolutionButton = event.currentTarget;
   const solutionContent = showSolutionButton.parentElement.nextElementSibling;
@@ -874,6 +1567,7 @@ function showExplanation(event) {
   setCommentSectionHeight();
 }
 
+// evaluate user's answer submission
 function evaluateUserAnswers(correspondingPost, questionType, entries, answerOptions) {
   let userAnswers;
   let correctAnswerOptions;
@@ -976,6 +1670,164 @@ function evaluateUserAnswers(correspondingPost, questionType, entries, answerOpt
   };
 }
 
+
+// listen for tab click event to switch between tab contents
+tabs.addEventListener('click', (event) => {
+  // if not current tab is clicked do this
+  if(event.target.matches('.tabs-item') && !event.target.classList.contains('current-tab')) {
+    const tabItems = Array.from(event.target.parentElement.children);
+    const currentTab = tabItems.find((tabItem) => {
+      return tabItem.matches('.current-tab');
+    })
+    const indexCurrentTab = tabItems.indexOf(currentTab);
+    const indexNewTab = tabItems.indexOf(event.target);
+
+    // switch between current tab items
+    currentTab.classList.toggle('current-tab');
+    event.target.classList.toggle('current-tab');
+    // switch between current tab content
+    tabsContent[indexCurrentTab].classList.toggle('current-tab-content');
+    tabsContent[indexNewTab].classList.toggle('current-tab-content');
+
+  }
+})
+
+// when DOM content is loaded render post feed content
+document.addEventListener('DOMContentLoaded', () => {
+  
+  // render post feed for the home page
+  if (document.location.pathname.includes('home')) {
+    
+    const homePostFeed = posts.filter((post) => {
+      return currentUser.followList.find((courseName) => courseName === post.course) 
+      || currentUser.posts.find((userPosts) => userPosts === post.postID) 
+      ? post : null;
+    })
+    // sort homePostFeed by date in descending order -> newest first
+    currentlyRenderedPosts = homePostFeed.sort((a, b) => { 
+      return new Date(b.postDate) - new Date(a.postDate);
+    });
+    
+
+    const emptyPostFeed = homePostFeed.length === 0;
+    if(emptyPostFeed) {
+      const message = 
+      `
+      <div class="empty-post-feed">
+        <h1 class="empty-post-feed-heading">Willkommen bei IUnity!</h1>
+        <p class="empty-post-feed-message">Ihr Feed ist noch leer. Entdecken Sie Kurse, die Sie interessieren. So bleiben Sie auf dem Laufenden, tauschen sich mit Kommilitonen aus und lernen gemeinsam weiter.</p>
+        <button type="button"><a href="explore.html" class="button-primary">Kurse finden</a></button>
+      </div>
+      `;
+
+      postsFeed.insertAdjacentHTML('afterbegin', message);
+    } else {
+      renderPostFeed(currentlyRenderedPosts);
+    }
+
+  }
+
+  // render post feed for the explore page
+  if (document.location.pathname.includes('explore')) {
+    const explorePostFeed = posts;
+    
+    // sort explorePostFeed by date in descending order -> newest first
+    currentlyRenderedPosts = explorePostFeed.sort((a, b) => { 
+      return new Date(b.postDate) - new Date(a.postDate);
+    });
+
+    renderPostFeed(currentlyRenderedPosts);
+  }
+
+  // render post feed for "my questions" page
+  if (document.location.pathname.includes('my-questions')) {
+    const myQuestionsPostFeed = posts.filter((post) => {
+      return currentUser.posts.find((postID) => postID === post.postID) ? post : null;
+    })
+    currentlyRenderedPosts = myQuestionsPostFeed.sort((a, b) => { 
+      return new Date(b.postDate) - new Date(a.postDate);
+    });
+
+    renderPostFeed(currentlyRenderedPosts);    
+  }
+
+  // render post feed for "my favorites" page
+  if (document.location.pathname.includes('my-favorites')) {
+    const favoritesPostFeed = posts.filter((post) => {
+      return currentUser.favoritePosts.find((postID) => postID === post.postID) ? post : null;
+    })
+    currentlyRenderedPosts = favoritesPostFeed.sort((a, b) => { 
+      return new Date(b.postDate) - new Date(a.postDate);
+    });
+
+    renderPostFeed(currentlyRenderedPosts);   
+  }
+
+
+})
+
+// listen for post interactions
+postsFeed.addEventListener('click', (e) => {
+  // check if click target is a checkbox input element
+  if(e.target.matches('.answer-option-input') && e.target.type === "checkbox") {
+    const answerOptions = Array.from(e.target.parentElement.parentElement.children);
+    const submitButton = e.target.parentElement.parentElement.parentElement.nextElementSibling;
+    
+    // toggle active selection class
+    e.target.parentElement.classList.toggle('answer-option-selected');
+    
+    // check if any selection was made
+    let selectionMade = answerOptions.some((answerOption) => {
+      return answerOption.matches('.answer-option-selected');
+    })
+    
+    // if any selection was made then activate the submit button else deactive submit button
+    selectionMade ? submitButton.classList.remove('button--inactive') : submitButton.classList.add('button--inactive')
+    
+  }
+  // check if click target is a radio input element
+  if(e.target.matches('.answer-option-input') && e.target.type === "radio") {
+    const answerOptions = Array.from(e.target.parentElement.parentElement.children);
+    const submitButton = e.target.parentElement.parentElement.parentElement.nextElementSibling;
+    
+    // check if target already selected
+    if (e.target.parentElement.matches('.answer-option-selected')) {
+      return
+    }
+    // if not selected do this
+    else {
+      // toggle selection class on the other option
+      answerOptions.forEach((option) => {
+        option.matches('.answer-option-selected') ? option.classList.toggle('answer-option-selected') : null;
+      })
+      // toggle selection class for current selection target
+      e.target.parentElement.classList.toggle('answer-option-selected');
+    }
+    
+    // check if any selection was made
+    let selectionMade = answerOptions.some((answerOption) => {
+      return answerOption.matches('.answer-option-selected');
+    })
+    
+    // if any selection was made then activate the submit button else deactive submit button
+    selectionMade ? submitButton.classList.remove('button--inactive') : submitButton.classList.add('button--inactive')    
+  }
+
+})
+
+// listen for input and change input element's height based on content
+postsFeed.addEventListener('input', (e) => {
+  // get input border height
+  let inputBorder = e.target.offsetHeight - e.target.clientHeight;
+
+  // set element's height to auto when input shrinks
+  e.target.style.height = "auto";
+
+  // set element's height when input grows
+  e.target.style.height = e.target.scrollHeight + inputBorder + "px";
+})
+
+// listen for submit events
 postsFeed.addEventListener('submit', (e) => {
   // stop the default submit event, data is not send to a server
   e.preventDefault();
@@ -1020,6 +1872,7 @@ postsFeed.addEventListener('submit', (e) => {
     postCardContent.insertAdjacentHTML("beforeend", result);
   }
 
+  // if user submits a new comment execute this
   if(e.submitter.matches('.submit-user-comment')) {
     const userCommentContent = entries.commentInput;
     const submitButton = e.target.lastElementChild;
@@ -1075,7 +1928,7 @@ postsFeed.addEventListener('submit', (e) => {
   
 })
 
-
+// listen for click events
 document.body.addEventListener('click', (event) => {
   // if user clicks on the sort button run this code
   if(event.target.matches('.sort-button')) {
@@ -1114,6 +1967,7 @@ document.body.addEventListener('click', (event) => {
   }
 })
 
+// listen for submit event and sort post feed based on user selection
 document.body.addEventListener('submit', (event) => {
   if (event.target.matches('.sort-feed-form')) {
     // stop default submit event
@@ -1192,37 +2046,3 @@ document.body.addEventListener('submit', (event) => {
     popoverContent.classList.toggle('hidden');
   }
 })
-
-function confirmCancellation(event) {
-  const isTargetModal = event.target.matches('.modal');
-  const isTargetRejectButton = event.target.matches('.reject-button');
-	const isTargetConfirmButton = event.target.matches('.confirm-button');
-  
-	// check if click target is modal or reject button then close the alert
-  isTargetModal || isTargetRejectButton ? event.currentTarget.remove() : null;
-	// check if history exists then go back 1 page else go to home page
-	if (isTargetConfirmButton && history.length > 1) {
-		history.go(-1);
-	} else if(isTargetConfirmButton) {
-		location.assign('home.html');
-	}
-}
-
-function closePage() {
-	const body = document.body;
-	const alert = 
-	`
-	<div class="modal" onclick="confirmCancellation(event)">
-		<div class="alert">
-			<p class="alert-message">Sind Sie sicher, dass Sie die Änderungen verwerfen wollen?</p>
-			<div class="flex-container gap-2">
-				<button type="button" class="reject-button button-tertiary">Nicht abbrechen</button>
-				<button type="button" class="confirm-button button-primary">Ja, abbrechen</button>
-			</div>
-		</div>
-	</div>
-	`;
-
-	body.insertAdjacentHTML('afterbegin', alert);
-
-}
