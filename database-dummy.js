@@ -915,7 +915,7 @@ if(sessionStorage.getItem('posts') === null) {
 }
 
 // if session storage has postAdded item then show success message
-if(sessionStorage.getItem('postAdded')) {
+if(sessionStorage.getItem('postAdded') !== null) {
   // inform the user about action success
   alertUser('Beitrag erfolgreich erstellt!');
   // after alert remove item from storage
